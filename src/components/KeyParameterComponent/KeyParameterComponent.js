@@ -58,6 +58,10 @@ export default function KeyParameterComponent() {
         KeyParameterService.getKPPDetailsByPaging().then((res) => {
             setKpps(res.data.responseData.content);
         });
+
+        KeyParameterService.getDpartmentDetails().then((res) => {
+            setDepartments(res.data);
+        });
     }, []);
 
     const saveKPPDetails = (e) => {
