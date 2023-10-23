@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const DEPARTMENT_URL="http://localhost:9091/department";
+const DEPARTMENT_URL="http://localhost:9091/designation/department";
 const BASE_URL="http://localhost:9091/key-perform-parameter";
 
 
