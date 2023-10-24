@@ -21,12 +21,12 @@ class DepartmentService{
     updateDepartmentDetails(department){
         return axios.put(BASE_URL, department)
     }
-   /* getDpartmentDetailsByPaging(){
-        return axios.get("http://localhost:9091/department/search?searchEnum=ALL&statusCdEnum=A&page=0&size=20&sort=deptName")
+    getDpartmentDetailsByPaging(){
+        return axios.get("http://localhost:9091/department/search?searchEnum=BY_STATUS&statusCdEnum=A&page=0&size=20&sort=deptName")
     }
 
-    getDpartmentDetailsByPagingByDate(e){
-        return axios.get(`http://localhost:9091/department/search?searchEnum=BY_NAME&searchString=${e}&statusCdEnum=A&page=0&size=20&sort=deptName`)
+    /*getDpartmentDetailsByPagingByDate(e){
+        return axios.get(`http://localhost:9091/department/search?searchEnum=BY_STATUS&searchString=${e}&statusCdEnum=A&page=0&size=20&sort=deptName`)
     }*/
    
 }

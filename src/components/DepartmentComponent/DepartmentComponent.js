@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-
-import axios from "axios";
 import DepartmentService from "../../services/DepartmentService";
 
 export default function DepartmentComponent() {
@@ -11,12 +9,10 @@ export default function DepartmentComponent() {
     const [departments, setDepartments] = useState([])
 
     useEffect(() => {
-        DepartmentService.getDpartmentDetails().then((res) => {
-            setDepartments(res.data);
+        DepartmentService.getDpartmentDetailsByPaging().then((res) => {
+            setDepartments(res.data.responseData.content);
             console.log(res.data)
         });
-
-
     }, []);
 
 
@@ -26,9 +22,11 @@ export default function DepartmentComponent() {
         let department = { deptName, remark, statusCd };
 
         DepartmentService.saveDpartmentDetails(department).then(res => {
-            DepartmentService.getDpartmentDetails().then((res) => {
-                setDepartments(res.data);
+            DepartmentService.getDpartmentDetailsByPaging().then((res) => {
+                setDepartments(res.data.responseData.content);
                 console.log(res.data)
+                setDeptName('');
+                setRemark('');
             });
             console.log("Department added");
         }
@@ -59,9 +57,9 @@ export default function DepartmentComponent() {
             let updateDepartment = { deptId, deptName, remark, statusCd };
 
             DepartmentService.updateDepartmentDetails(updateDepartment).then(res => {
-                DepartmentService.getDpartmentDetails().then((res) => {
-                    setDepartments(res.data);
-                    console.log(res.data)
+                DepartmentService.getDpartmentDetailsByPaging().then((res) => {
+                    setDepartments(res.data.responseData.content);
+                    console.log(res.data.responseData.content)
                 });
                 console.log("Department deleted");
             }
@@ -77,8 +75,8 @@ export default function DepartmentComponent() {
         let department = { deptId, deptName, remark, statusCd };
 
         DepartmentService.updateDepartmentDetails(department).then(res => {
-            DepartmentService.getDpartmentDetails().then((res) => {
-                setDepartments(res.data);
+            DepartmentService.getDpartmentDetailsByPaging().then((res) => {
+                setDepartments(res.data.responseData.content);
                 console.log(res.data)
             });
             console.log("Department added");
