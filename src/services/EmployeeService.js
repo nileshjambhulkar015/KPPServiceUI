@@ -1,40 +1,46 @@
 import axios from "axios";
 
-const DEPARTMENT_URL="http://localhost:9091/designation/department";
-const BASE_URL="http://localhost:9091/employee";
+const DEPARTMENT_URL = "http://localhost:9091/designation/department";
+const DESIGNATION_URL = "http://localhost:9091/designation/by/47";
+const BASE_URL = "http://localhost:9091/employee";
 
 
 
-class EmployeeService{
+class EmployeeService {
 
-    getDpartmentDetails(){
+    getDpartmentDetails() {
         return axios.get(DEPARTMENT_URL)
     }
 
-    saveEmployeeDetails(employee){
-        return axios.post(BASE_URL,employee)
+    getDesignationByDeptId() {
+     console.log(DESIGNATION_URL)
+        return axios.get(DESIGNATION_URL)
     }
 
-    getEmployeeDetailsByPaging(){
+    saveEmployeeDetails(employee) {
+        return axios.post(BASE_URL, employee)
+    }
+
+    getEmployeeDetailsByPaging() {
         return axios.get("http://localhost:9091/employee/search?statusCd=A&page=0&size=20&sort=emp.emp_fname");
     }
-    
-    getEmployeeById(empId){
- console.log(empId)
-        return axios.get(BASE_URL+'/empId?empId='+empId)
-    }
-    
-    getDepartmentById(deptId){
-        console.log("grt call")
-        return axios.get(BASE_URL+'/'+deptId)
+
+    getEmployeeById(empId) {
+        console.log(empId)
+        return axios.get(BASE_URL + '/empId?empId=' + empId)
     }
 
-    updateEmployeeDetails(employee){
+    getDepartmentById(deptId) {
+        console.log("grt call")
+        return axios.get(BASE_URL + '/' + deptId)
+    }
+
+    updateEmployeeDetails(employee) {
 
         return axios.put(BASE_URL, employee)
     }
 
-   
+
 
 }
 

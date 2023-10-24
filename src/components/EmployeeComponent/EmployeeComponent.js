@@ -29,6 +29,7 @@ export default function EmployeeComponent() {
 
     const [employees, setEmployees] = useState([])
     const [departments, setDepartments] = useState([])
+    const [designations, setDesignations] = useState([])
 
     const saveEmployeeDetails = (e) => {
         e.preventDefault()
@@ -57,6 +58,10 @@ export default function EmployeeComponent() {
 
         EmployeeService.getDpartmentDetails().then((res) => {
             setDepartments(res.data);
+        });
+
+        EmployeeService.getDesignationByDeptId().then((res) => {
+            setDesignations(res.data);
         });
     }, []);
 
@@ -281,9 +286,9 @@ export default function EmployeeComponent() {
                                     <select className="form-control" id="desigId" onChange={(e) => setDesigId(e.target.value)}>
                                         <option>--Select Department--</option>
                                                     {
-                                                        departments.map(
-                                                            department =>
-                                                                <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
+                                                        designations.map(
+                                                            designation =>
+                                                                <option key={designation.desigId} value={designation.desigId}>{designation.desigName}</option>
                                                         )
                                                     };
                                         </select>

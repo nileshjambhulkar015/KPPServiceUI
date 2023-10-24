@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-
-import axios from "axios";
 import DepartmentService from "../../services/DepartmentService";
 
 export default function DepartmentComponent() {

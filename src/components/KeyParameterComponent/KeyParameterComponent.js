@@ -25,6 +25,7 @@ export default function KeyParameterComponent() {
     
     const [kpps, setKpps] = useState([])
     const [departments, setDepartments] = useState([])
+    const [designations, setDesignations] = useState([])
 
     
     const showKppById = (e) => {
