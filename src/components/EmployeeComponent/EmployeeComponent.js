@@ -50,6 +50,10 @@ export default function EmployeeComponent() {
         // window.location.reload(); 
     }
 
+    const handleDeptId = (e)=>{
+        let currentDeptId=e.target.value;
+        setDeptId(currentDeptId)
+    }
    
     useEffect(() => {
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
@@ -58,13 +62,17 @@ export default function EmployeeComponent() {
 
         EmployeeService.getDpartmentDetails().then((res) => {
             setDepartments(res.data);
-        });
-
-        EmployeeService.getDesignationByDeptId().then((res) => {
-            setDesignations(res.data);
-        });
+        });    
+        
     }, []);
 
+
+    useEffect((e)=>{
+       deptId && EmployeeService.getDesignationByDeptId(deptId).then((res) => {
+            setDesignations( res.data);
+        });
+    },[deptId]);
+  
     const showEmployeeById = (e) => {
 
         EmployeeService.getEmployeeById(e).then(res => {
@@ -226,7 +234,9 @@ export default function EmployeeComponent() {
                         <h4 className="modal-title">Add Employee</h4>
                     </div>
                     <div className="modal-body">
-                        <form className="form-horizontal" action="/action_page.php">
+                        <form className="form-horizontal" action="/action_page.php">                      
+
+
                             <div className="form-group">
                                 <div className="row">
                                     <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empFirstName">Employee Name:</label>
@@ -265,7 +275,7 @@ export default function EmployeeComponent() {
                                     <label className="control-label col-sm-3" htmlFor="deptId">Department Name:</label>
                                     <div className="col-sm-3">
 
-                                    <select className="form-control" id="deptId" onChange={(e) => setDeptId(e.target.value)}>
+                                    <select className="form-control" id="deptId" onChange={(e) => handleDeptId(e)}>
                                         <option>--Select Department--</option>
                                                     {
                                                         departments.map(
@@ -340,18 +350,18 @@ export default function EmployeeComponent() {
                                 <div className="row">
                                     <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empGender">Gender:</label>
                                     <div className="col-sm-3">
-                                        <select className="form-control" id="empGender" onChange={(e) => setEmpGender(e.target.value)} >
-                                            <option value={'Male'}>Male</option>
-                                            <option value={'Female'}>Female</option>
+                                        <select className="form-control" id="empGender" onChange={(e) => setEmpGender(e)} >
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
                                         </select>
                                     </div>
 
                                     <label className="control-label col-sm-2" htmlFor="kppObjective" >Blood Group:</label>
 
                                     <div className="col-sm-3">
-                                        <select className="form-control" id="empBloodgroup" onChange={(e) => setEmpBloodgroup(e.target.value)}>
-                                            <option value={"A+"}>A+ve</option>
-                                            <option value={"B+"}>B+ve</option>
+                                        <select className="form-control" id="empBloodgroup" onChange={(e) => setEmpBloodgroup(e)}>
+                                            <option value="A+">A+ve</option>
+                                            <option value="B+">B+ve</option>
                                         </select>
                                     </div>
                                 </div>

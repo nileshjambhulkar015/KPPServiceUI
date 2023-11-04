@@ -13,7 +13,7 @@ class DesignationService {
 
 
     getDesignationDetailsByPaging() {
-        return axios.get("http://localhost:9091/designation/search?statusCd=A&page=0&size=20")
+        return axios.get("http://localhost:9091/designation/search?statusCd=A&page=0&size=20&sort=role.role_id")
     }
 
 

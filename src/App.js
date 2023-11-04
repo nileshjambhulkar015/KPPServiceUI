@@ -7,11 +7,10 @@ import DesignationComponent from './components/DesignationComponent/DesignationC
 
 import DepartmentComponent from './components/DepartmentComponent/DepartmentComponent';
 import EmployeeKppComponent from "./components/EmployeeKppsComponent/EmployeeKppsComponent";
+import RoleComponent from "./components/RoloComponent/RoleComponent";
 
 function App() {
   return (
-
-
     <Router>
     <nav className="navbar navbar-inverse">
       <div className="container-fluid">
@@ -20,6 +19,7 @@ function App() {
         </div>
         <ul className="nav navbar-nav">
           <li className="active"><a href="#">Home</a></li>
+          <li><Link to="/role">Role</Link></li>
           <li><Link to="/department">Department</Link></li>
           <li><Link to="/designation">Designation</Link></li>
           <li><Link to="/employee">Employee</Link></li>
@@ -34,13 +34,17 @@ function App() {
       </div>
     </nav>
     <Switch>
+      
+    <Route exact path="/" component={DepartmentComponent}></Route>
+    <Route exact path="/role" component={RoleComponent}></Route>
       <Route exact path="/department" component={DepartmentComponent}></Route>
-      <Route exact path="/designation"><DesignationComponent/></Route>
-      <Route exact path="/employee"><EmployeeComponent/></Route>
-      <Route exact path="/keyparemeter" ><KeyParameterComponent/></Route>
-      <Route exact path="/employeekpp"><EmployeeKppComponent/></Route>
+      <Route exact path="/designation" component={DesignationComponent}></Route>
+      <Route exact path="/employee" component={EmployeeComponent}></Route>
+      <Route exact path="/keyparemeter" component={KeyParameterComponent} ></Route>
+      <Route exact path="/employeekpp" component={EmployeeKppComponent}></Route>
     </Switch>
-  </Router>    );
+  </Router>    
+  );
 }
 
 export default App;

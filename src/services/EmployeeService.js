@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const DEPARTMENT_URL = "http://localhost:9091/designation/department";
-const DESIGNATION_URL = "http://localhost:9091/designation/by/47";
+const DESIGNATION_URL = "http://localhost:9091/designation/by";
 const BASE_URL = "http://localhost:9091/employee";
 
 
@@ -12,11 +12,11 @@ class EmployeeService {
         return axios.get(DEPARTMENT_URL)
     }
 
-    getDesignationByDeptId() {
+    getDesignationByDeptId(deptId) {
      console.log(DESIGNATION_URL)
-        return axios.get(DESIGNATION_URL)
+        return axios.get(`http://localhost:9091/designation/by/${deptId}`)
     }
-
+    
     saveEmployeeDetails(employee) {
         return axios.post(BASE_URL, employee)
     }

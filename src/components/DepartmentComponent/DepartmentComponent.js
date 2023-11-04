@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react";
 import DepartmentService from "../../services/DepartmentService";
+import RoleService from "../../services/RoleService";
 
 export default function DepartmentComponent() {
+    const [roleId, setRoleId] = useState('');
+    const [roleName, setRoleName] = useState('');
     const [deptId, setDeptId] = useState('');
     const [deptName, setDeptName] = useState('');
     const [remark, setRemark] = useState('');
 
     const [departments, setDepartments] = useState([])
+    const [roles, setRoles] = useState([])
 
     useEffect(() => {
         DepartmentService.getDpartmentDetailsByPaging().then((res) => {
             setDepartments(res.data.responseData.content);
             console.log(res.data)
+        });
+
+        RoleService.getRoles().then((res) => {
+            setRoles(res.data);
         });
     }, []);
 
@@ -19,14 +27,15 @@ export default function DepartmentComponent() {
     const saveDepartment = (e) => {
         e.preventDefault()
         let statusCd = 'A';
-        let department = { deptName, remark, statusCd };
+        let department = { roleId, deptName, remark, statusCd };
 
         DepartmentService.saveDpartmentDetails(department).then(res => {
-            DepartmentService.getDpartmentDetailsByPaging().then((res) => {
-                setDepartments(res.data.responseData.content);
-                console.log(res.data)
-                setDeptName('');
-                setRemark('');
+            console.log("res=", res.data)
+            DepartmentService.getDpartmentDetailsByPaging().then((res) => {              
+                    setDepartments(res.data.responseData.content);                  
+                    setDeptName('');
+                    setRemark('');
+              
             });
             console.log("Department added");
         }
@@ -38,6 +47,8 @@ export default function DepartmentComponent() {
 
         DepartmentService.getDepartmentById(e).then(res => {
             let department = res.data;
+            setRoleId(department.roleId)
+            setRoleName(department.roleName)
             setDeptId(department.deptId)
             setDeptName(department.deptName)
             setRemark(department.remark)
@@ -50,11 +61,12 @@ export default function DepartmentComponent() {
     const deleteDepartmentById = (e) => {
         DepartmentService.getDepartmentById(e).then(res => {
             let department = res.data;
+            let roleId = department.roleId;
             let deptId = department.deptId;
             let deptName = department.deptName;
             let remark = department.remark;
             let statusCd = 'I';
-            let updateDepartment = { deptId, deptName, remark, statusCd };
+            let updateDepartment = { roleId, deptId, deptName, remark, statusCd };
 
             DepartmentService.updateDepartmentDetails(updateDepartment).then(res => {
                 DepartmentService.getDpartmentDetailsByPaging().then((res) => {
@@ -72,7 +84,7 @@ export default function DepartmentComponent() {
 
         e.preventDefault()
         let statusCd = 'A';
-        let department = { deptId, deptName, remark, statusCd };
+        let department = { roleId, deptId, deptName, remark, statusCd };
 
         DepartmentService.updateDepartmentDetails(department).then(res => {
             DepartmentService.getDpartmentDetailsByPaging().then((res) => {
@@ -121,6 +133,7 @@ export default function DepartmentComponent() {
                                         (department, index) =>   //index is inbuilt variable of map started with 0
                                             <tr key={department.deptId}>
                                                 <td>{index + 1}</td>
+                                                <td>{department.roleName}</td>
                                                 <td>{department.deptName}</td>
                                                 <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateDepartment" onClick={() => showDepartmentById(department.deptId)}>Update</button>
                                                     <button type="submit" className="btn col-sm-offset-1 btn-info" onClick={() => deleteDepartmentById(department.deptId)}>Delete</button>
@@ -146,7 +159,23 @@ export default function DepartmentComponent() {
                             <h4 className="modal-title">Add Department</h4>
                         </div>
                         <div className="modal-body">
-                            <form className="form-horizontal">
+                        <form className="form-horizontal">
+                        <div className="form-group">
+                                <label className="control-label col-sm-4" htmlFor="deptName">Select Role Name:</label>
+                                <div className="col-sm-8">
+                                <select className="form-control" id="roleId" onChange={(e) => setRoleId(e.target.value)}>
+                                        <option>--Select Role--</option>
+                                                    {
+                                                        roles.map(
+                                                            role =>
+                                                                <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
+                                                        )
+                                                    };
+
+                                        </select>
+                                </div>
+                            </div>
+                            
                                 <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="deptName">Enter Department Name:</label>
@@ -219,6 +248,14 @@ export default function DepartmentComponent() {
                         </div>
                         <div className="modal-body">
                             <form className="form-horizontal">
+                            <div> <input type="hidden" id="roleId" name="roleId" value={roleId} /></div>
+                                <div className="form-group">
+                                    <label className="control-label col-sm-4" htmlFor="roleName" >Role Name:</label>
+                                    <div className="col-sm-8">
+                                        {roleName}
+                                    </div>
+                                </div>
+
                                 <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="deptName" >Department Name:</label>

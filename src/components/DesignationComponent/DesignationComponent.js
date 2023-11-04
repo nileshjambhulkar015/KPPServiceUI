@@ -2,8 +2,11 @@ import React from "react";
 import DesignationService from "../../services/DesignationService";
 import { useState } from "react";
 import { useEffect } from "react";
+import RoleService from "../../services/RoleService";
+import DepartmentService from "../../services/DepartmentService";
 export default function DesignationComponent() {
-
+    const [roleId, setRoleId] = useState('');
+    const [roleName, setRoleName] = useState('');
     const [desigId, setDesigId] = useState('');
     const [deptId, setDeptId] = useState('');
     const [deptName, setDeptName] = useState('');   
@@ -12,6 +15,7 @@ export default function DesignationComponent() {
 
     const [designations, setDesignations] = useState([])
     const [departments, setDepartments] = useState([])
+    const [roles, setRoles] = useState([])
 
     useEffect(() => {
         DesignationService.getDesignationDetailsByPaging().then((res) => {
@@ -19,15 +23,26 @@ export default function DesignationComponent() {
             console.log(res.data)
         });
 
-        DesignationService.getDpartmentDetails().then((res) => {
-            setDepartments(res.data);
+        DepartmentService.getRolesInDept().then((res) => {
+            setRoles(res.data);
         });
+
+       /* DesignationService.getDpartmentDetails().then((res) => {
+            setDepartments(res.data);
+        });*/
     }, []);
+
+    //for all department by role id
+    useEffect((e)=>{
+        roleId && DepartmentService.getDepartmentByRoleId(roleId).then((res) => {
+            setDepartments( res.data);
+         });
+     },[roleId]);
 
     const saveDesignationDetails = (e) => {
         e.preventDefault()
         let statusCd = 'A';
-        let designation = { deptId, desigName, remark, statusCd };
+        let designation = { roleId, deptId, desigName, remark, statusCd };
 
         DesignationService.saveDesignationDetails(designation).then(res => {
             DesignationService.getDesignationDetailsByPaging().then((res) => {
@@ -45,6 +60,9 @@ export default function DesignationComponent() {
 
         DesignationService.getDesignationById(e).then(res => {
             let designation = res.data;
+            console.log(designation)
+            setRoleId(designation.roleId)
+            setRoleName(designation.roleName)
             setDesigId(designation.desigId)
             setDeptId(designation.deptId)
             setDeptName(designation.deptName)
@@ -60,7 +78,7 @@ export default function DesignationComponent() {
 
         e.preventDefault()
         let statusCd = 'A';
-        let updateDesignation = {desigId,deptId, desigName,remark, statusCd };
+        let updateDesignation = {desigId,roleId, deptId, desigName,remark, statusCd };
         
         DesignationService.updateDesignationDetails(updateDesignation).then(res => {
             DesignationService.getDesignationDetailsByPaging().then((res) => {
@@ -78,13 +96,14 @@ export default function DesignationComponent() {
         DesignationService.getDesignationById(e).then(res => {
             let designation = res.data;
             let desigId = designation.desigId;
+            let roleId = designation.roleId;
            let deptId =designation.deptId;
           
            let desigName=designation.desigName;
             let remark =designation.remark;
 
             let statusCd = 'I';
-            let deleteDesignation = {desigId,deptId,desigName, remark, statusCd };
+            let deleteDesignation = {desigId,roleId, deptId,desigName, remark, statusCd };
 
            
             DesignationService.updateDesignationDetails(deleteDesignation).then(res => {
@@ -125,6 +144,7 @@ export default function DesignationComponent() {
                         <thead>
                             <tr>
                                 <th>Sr No</th>
+                                <th>Role Name</th>
                                 <th>Department Name</th>
                                 <th>Designation Name</th>
                                 <th>Action</th>
@@ -136,6 +156,7 @@ export default function DesignationComponent() {
                                         (designation, index) =>   //index is inbuilt variable of map started with 0
                                             <tr key={designation.desigId}>
                                                 <td>{index + 1}</td>
+                                                <td>{designation.roleName}</td>
                                                 <td>{designation.deptName}</td>
                                                 <td>{designation.desigName}</td>
                                                 <td className="col-sm-3"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateDesignation" onClick={() => showDesignationById(designation.desigId)}>Update</button>
@@ -164,7 +185,23 @@ export default function DesignationComponent() {
                         <h4 className="modal-title">Add Designation</h4>
                     </div>
                     <div className="modal-body">
-                        <form className="form-horizontal" action="/action_page.php">
+                        <form className="form-horizontal">
+                        <div className="form-group">
+                                <label className="control-label col-sm-4" htmlFor="deptName">Select Role Name:</label>
+                                <div className="col-sm-8">
+                                <select className="form-control" id="roleId" onChange={(e) => setRoleId(e.target.value)}>
+                                        <option>--Select Role--</option>
+                                                    {
+                                                        roles.map(
+                                                            role =>
+                                                                <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
+                                                        )
+                                                    };
+
+                                        </select>
+                                </div>
+                            </div>
+
                             <div className="form-group">
                                 <label className="control-label col-sm-4" htmlFor="deptName">Select Department Name:</label>
                                 <div className="col-sm-8">
@@ -216,7 +253,14 @@ export default function DesignationComponent() {
                         <h4 className="modal-title">Update Designation</h4>
                     </div>
                     <div className="modal-body">
-                        <form className="form-horizontal" action="/action_page.php">
+                        <form className="form-horizontal" >
+                        <div> <input type="hidden" id="roleId" name="roleId" value={roleId} /></div>
+                        <div className="form-group">
+                                <label className="control-label col-sm-4" htmlFor="roleName">Role Name:</label>
+                                <div className="col-sm-8">
+                                {roleName}
+                                </div>
+                            </div>
                         <div> <input type="hidden" id="desigId" name="desigId" value={desigId} /></div>
                             <div className="form-group">
                                 <label className="control-label col-sm-4" htmlFor="deptName">Department Name:</label>
@@ -262,8 +306,14 @@ export default function DesignationComponent() {
                     </div>
                     <div className="modal-body">
                         <form className="form-horizontal" action="/action_page.php">
+                        <div className="form-group">
+                                <label className="control-label col-sm-4" htmlFor="roleName">Role Name:</label>
+                                <div className="col-sm-8">
+                                {roleName}
+                                </div>
+                            </div>
                             <div className="form-group">
-                                <label className="control-label col-sm-4" htmlFor="deptName">Select Department Name:</label>
+                                <label className="control-label col-sm-4" htmlFor="deptName">Department Name:</label>
                                 <div className="col-sm-8">
                                 {deptName}
                                 </div>
