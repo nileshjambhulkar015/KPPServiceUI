@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import EmployeeService from "../../services/EmployeeService";
+import RoleService from "../../services/RoleService";
+import DepartmentService from "../../services/DepartmentService";
+import DesignationService from "../../services/DesignationService";
 export default function EmployeeComponent() {
     
     const [empId, setEmpId] = useState('');
+    const [empEId, setEmpEId] = useState('');
+    const [roleId, setRoleId] = useState('');
+    const [roleName, setRoleName] = useState('');
     const [deptId, setDeptId] = useState('');
     const [deptName, setDeptName] = useState('');
     const [desigId, setDesigId] = useState('');
     const [desigName, setDesigName] = useState('');
-    const [roleId, setRoleId] = useState('');
     const [regionId, setRegionId] = useState('');
     const [regionName, setRegionName] = useState('');
     const [siteId, setSiteId] = useState('');
@@ -28,6 +33,7 @@ export default function EmployeeComponent() {
     const [employeeId, setEmployeeId] = useState('');
 
     const [employees, setEmployees] = useState([])
+    const [roles, setRoles] = useState([])
     const [departments, setDepartments] = useState([])
     const [designations, setDesignations] = useState([])
 
@@ -37,7 +43,7 @@ export default function EmployeeComponent() {
         let roleId ='1';
         let regionId='1';
         let siteId = '1';
-        let employee = { deptId,desigId,roleId,regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
+        let employee = { roleId,deptId,desigId,regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
         console.log(employee)
     
         EmployeeService.saveEmployeeDetails(employee).then(res => {
@@ -49,29 +55,32 @@ export default function EmployeeComponent() {
         );
         // window.location.reload(); 
     }
-
-    const handleDeptId = (e)=>{
-        let currentDeptId=e.target.value;
-        setDeptId(currentDeptId)
-    }
    
     useEffect(() => {
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
             setEmployees(res.data.responseData.content);
         });
 
-        EmployeeService.getDpartmentDetails().then((res) => {
-            setDepartments(res.data);
-        });    
+        RoleService.getRolesInDesignation().then((res) => {
+            setRoles(res.data);
+        });
         
     }, []);
 
 
-    useEffect((e)=>{
-       deptId && EmployeeService.getDesignationByDeptId(deptId).then((res) => {
-            setDesignations( res.data);
-        });
-    },[deptId]);
+ //for all department by role id
+ useEffect((e)=>{
+    roleId && DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res) => {
+        setDepartments( res.data);
+     });
+ },[roleId]);
+
+   //for all designation  by dept id
+   useEffect((e)=>{
+    deptId && DesignationService.getDesignationDetailsForKpp(deptId).then((res) => {
+        setDesignations( res.data);
+     });
+ },[deptId]);
   
     const showEmployeeById = (e) => {
 
@@ -79,11 +88,13 @@ export default function EmployeeComponent() {
             let employee = res.data;
             console.log(employee)
             setEmpId(employee.empId)
+            setEmpEId(employee.empEId)
+            setRoleId(employee.roleId)
+            setRoleName(employee.roleName)
             setDeptId(employee.deptId)
             setDeptName(employee.deptName)
             setDesigId(employee.desigId)
-            setDesigName(employee.desigName)
-            setRoleId(employee.roleId)
+            setDesigName(employee.desigName)         
             setRegionId(employee.regionId)
             setRegionName(employee.regionName)
             setSiteId(employee.siteId)
@@ -110,13 +121,13 @@ export default function EmployeeComponent() {
         EmployeeService.getEmployeeById(e).then(res => {
             let employee = res.data;
             console.log(employee)
-            
+            setEmpEId(employee.empEId)
+            setRoleId(employee.roleId)
             setEmpId(employee.empId)
             setDeptId(employee.deptId)
             setDeptName(employee.deptName)
             setDesigId(employee.desigId)
-            setDesigName(employee.desigName)
-            setRoleId(employee.roleId)
+            setDesigName(employee.desigName)         
             setRegionId(employee.regionId)
             setRegionName(employee.regionName)
             setSiteId(employee.siteId)
@@ -137,7 +148,7 @@ export default function EmployeeComponent() {
             
             let statusCd = 'I';
             
-            let employeeData = {empId, deptId,desigId,roleId,regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
+            let employeeData = {empId, empEId,roleId, deptId,desigId,regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
             EmployeeService.updateEmployeeDetails(employeeData).then(res => {
                 EmployeeService.getEmployeeDetailsByPaging().then((res) => {
                     setEmployees(res.data.responseData.content);
@@ -156,7 +167,7 @@ export default function EmployeeComponent() {
         let roleId ='1';
         let regionId='1';
         let siteId = '1';
-        let employeeData = {empId, deptId,desigId,roleId,regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
+        let employeeData = {empId,  empEId,roleId,deptId,desigId,regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
         
         EmployeeService.updateEmployeeDetails(employeeData).then(res => {
             EmployeeService.getEmployeeDetailsByPaging().then((res) => {
@@ -172,11 +183,11 @@ export default function EmployeeComponent() {
        
         <div className="row">
         <h2 className="text-center">Employee List</h2>
-        <div className="col-md-2"></div>
-        <div className="col-md-8">
+        <div className="col-md-1"></div>
+        <div className="col-md-10">
             <div className="row">
                 <div className="col-sm-8">
-                    <form className="form-horizontal" action="/action_page.php">
+                    <form className="form-horizontal">
                         <div className="form-group">
                             <label className="control-label col-sm-3" htmlFor="email">Department Search:</label>
                             <div className="col-sm-4">
@@ -194,6 +205,8 @@ export default function EmployeeComponent() {
                         <tr>
                         <th>Sr No</th>
                             <th>Employee Name</th>
+                            <th>Employee Id</th>
+                            <th>Role Name</th>
                             <th>Department Name</th>
                             <th>Designation Name</th>
                             <th>Mobile No</th>
@@ -208,6 +221,8 @@ export default function EmployeeComponent() {
                                             <tr key={employee.empId}>
                                                 <td>{index + 1}</td>
                                                 <td className="text-justify">{employee.empFirstName + ' '+employee.empMiddleName+' '+employee.empLastName}</td>
+                                                <td>{employee.empEId}</td>
+                                                <td>{employee.roleName}</td>
                                                 <td>{employee.deptName}</td>
                                                 <td>{employee.desigName}</td>
                                                 <td className="text-justify">{employee.empMobileNo}</td>
@@ -223,7 +238,7 @@ export default function EmployeeComponent() {
             </div>
 
         </div>
-        <div className="col-md-2"></div>
+        <div className="col-md-1"></div>
 
 {/* Save Employee Modal */}
         <div className="modal fade" id="saveEmployee" role="dialog">
@@ -234,7 +249,60 @@ export default function EmployeeComponent() {
                         <h4 className="modal-title">Add Employee</h4>
                     </div>
                     <div className="modal-body">
-                        <form className="form-horizontal" action="/action_page.php">                      
+                        <form className="form-horizontal">                      
+                        <div className="form-group">
+                                <label className="control-label col-sm-4" htmlFor="deptId">Select Department Name:</label>
+                                <div className="col-sm-4">
+                                    <div className="form-group">
+                                    <select className="form-control" id="roleId" onChange={(e) => setRoleId(e.target.value)}>
+                                        <option>--Select Role--</option>
+                                                    {
+                                                        roles.map(
+                                                            role =>
+                                                                <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
+                                                        )
+                                                    };
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="control-label col-sm-4" htmlFor="deptId">Select Department Name:</label>
+                                <div className="col-sm-4">
+                                    <div className="form-group">
+                                        <select className="form-control" id="deptId" onChange={(e) => setDeptId(e.target.value)}>
+                                        <option>--Select Department--</option>
+                                                    {
+                                                        departments.map(
+                                                            department =>
+                                                                <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
+                                                        )
+                                                    };
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="control-label col-sm-4" htmlFor="desigId">Select Designation Name:</label>
+                                <div className="col-sm-4">
+                                    <div className="form-group">
+                                        <select className="form-control" id="desigId"  onChange={(e) => setDesigId(e.target.value)}>
+                                        <option>--Select Designation--</option>
+                                                    {
+                                                        designations.map(
+                                                            designation =>
+                                                                <option key={designation.desigId} value={designation.desigId}>{designation.desigName}</option>
+                                                        )
+                                                    };
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 
 
                             <div className="form-group">
@@ -270,43 +338,7 @@ export default function EmployeeComponent() {
                                 </div>
                             </div>
 
-                            <div className="form-group">
-                                <div className="row">
-                                    <label className="control-label col-sm-3" htmlFor="deptId">Department Name:</label>
-                                    <div className="col-sm-3">
-
-                                    <select className="form-control" id="deptId" onChange={(e) => handleDeptId(e)}>
-                                        <option>--Select Department--</option>
-                                                    {
-                                                        departments.map(
-                                                            department =>
-                                                                <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
-                                                        )
-                                                    };
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <div className="row">
-                                    <label className="control-label col-sm-3" htmlFor="desigId"> Designation Name:</label>
-                                    <div className="col-sm-3">
-
-                                    <select className="form-control" id="desigId" onChange={(e) => setDesigId(e.target.value)}>
-                                        <option>--Select Department--</option>
-                                                    {
-                                                        designations.map(
-                                                            designation =>
-                                                                <option key={designation.desigId} value={designation.desigId}>{designation.desigName}</option>
-                                                        )
-                                                    };
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="form-group">
+                           <div className="form-group">
                                 <div className="row">
                                     <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empMobileNo">Mobile No 1:</label>
                                     <div className="col-sm-3">
@@ -350,7 +382,7 @@ export default function EmployeeComponent() {
                                 <div className="row">
                                     <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empGender">Gender:</label>
                                     <div className="col-sm-3">
-                                        <select className="form-control" id="empGender" onChange={(e) => setEmpGender(e)} >
+                                        <select className="form-control" id="empGender" onChange={(e) => setEmpGender(e.target.value)} >
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                         </select>
@@ -359,7 +391,7 @@ export default function EmployeeComponent() {
                                     <label className="control-label col-sm-2" htmlFor="kppObjective" >Blood Group:</label>
 
                                     <div className="col-sm-3">
-                                        <select className="form-control" id="empBloodgroup" onChange={(e) => setEmpBloodgroup(e)}>
+                                        <select className="form-control" id="empBloodgroup" onChange={(e) => setEmpBloodgroup(e.target.value)}>
                                             <option value="A+">A+ve</option>
                                             <option value="B+">B+ve</option>
                                         </select>
@@ -546,6 +578,7 @@ export default function EmployeeComponent() {
 
             </div>
         </div>
+       
         {/** Display Employee by Id */}
         <div className="modal fade" id="showEmployee" role="dialog">
             <div className="modal-dialog modal-lg">
@@ -556,8 +589,35 @@ export default function EmployeeComponent() {
                         <button type="button" className="close" data-dismiss="modal">&times;</button>
                         <h4 className="modal-title">View Employee Details</h4>
                     </div>
+
                     <div className="modal-body">
                         <form className="form-horizontal" action="/action_page.php">
+                        <div className="form-group">
+                                <div className="row">
+                                    <label className="control-label col-sm-3" htmlFor="deptId">Role Name:</label>
+                                    <div className="col-sm-3">
+                                    {roleName}
+                                    </div>
+                                </div>
+                            </div>
+                        <div className="form-group">
+                                <div className="row">
+                                    <label className="control-label col-sm-3" htmlFor="deptId">Department Name:</label>
+                                    <div className="col-sm-3">
+                                    {deptName}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <div className="row">
+                                    <label className="control-label col-sm-3" htmlFor="desigId"> Designation Name:</label>
+                                    <div className="col-sm-3">
+                                        {desigName}
+                                    </div>
+                                </div>
+                            </div>
+
                             <div className="form-group">
                                 <div className="row">
                                     <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empFirstName">Employee Name:</label>
@@ -585,23 +645,7 @@ export default function EmployeeComponent() {
                                 </div>
                             </div>
 
-                            <div className="form-group">
-                                <div className="row">
-                                    <label className="control-label col-sm-3" htmlFor="deptId">Department Name:</label>
-                                    <div className="col-sm-3">
-                                    {deptName}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <div className="row">
-                                    <label className="control-label col-sm-3" htmlFor="desigId"> Designation Name:</label>
-                                    <div className="col-sm-3">
-                                        {desigName}
-                                    </div>
-                                </div>
-                            </div>
+                           
 
                             <div className="form-group">
                                 <div className="row">

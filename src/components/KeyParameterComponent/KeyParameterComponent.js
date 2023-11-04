@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import DepartmentService from "../../services/DepartmentService";
 import KeyParameterService from "../../services/KeyParameterService";
+import DesignationService from "../../services/DesignationService";
+import RoleService from "../../services/RoleService";
 
 export default function KeyParameterComponent() {
     const [kppId, setKppId] = useState('');
+    const [roleId, setRoleId] = useState('');
+    const [roleName, setRoleName] = useState('');
     const [deptId, setDeptId] = useState('');
     const [deptName, setDeptName] = useState('');
     const [desigId, setDesigId] = useState('');
@@ -20,12 +24,13 @@ export default function KeyParameterComponent() {
     const [kppRating4, setKppRating4] = useState('');
     const [kppRating5, setKppRating5] = useState('');   
     const [remark, setRemark] = useState('');
-    const [employeeId, setEmployeeId] = useState('');  
+   
     
     
     const [kpps, setKpps] = useState([])
     const [departments, setDepartments] = useState([])
     const [designations, setDesignations] = useState([])
+    const [roles, setRoles] = useState([])
 
     
     const showKppById = (e) => {
@@ -34,6 +39,8 @@ export default function KeyParameterComponent() {
             let kpp = res.data;
             console.log(kpp)
             setKppId(kpp.kppId)
+            setRoleId(kpp.roleId)
+            setRoleName(kpp.roleName)
             setDeptId(kpp.deptId)
             setDeptName(kpp.deptName)
             setDesigId(kpp.desigId)
@@ -60,15 +67,29 @@ export default function KeyParameterComponent() {
             setKpps(res.data.responseData.content);
         });
 
-        KeyParameterService.getDpartmentDetails().then((res) => {
-            setDepartments(res.data);
+        RoleService.getRolesInDesignation().then((res) => {
+            setRoles(res.data);
         });
     }, []);
+
+     //for all department by role id
+     useEffect((e)=>{
+        roleId && DepartmentService.getDepartmentByRoleIdFromDesign(roleId).then((res) => {
+            setDepartments( res.data);
+         });
+     },[roleId]);
+
+       //for all designation  by dept id
+       useEffect((e)=>{
+        deptId && DesignationService.getDesignationDetailsForKpp(deptId).then((res) => {
+            setDesignations( res.data);
+         });
+     },[deptId]);
 
     const saveKPPDetails = (e) => {
         e.preventDefault()
         let statusCd = 'A';
-        let kpp = { deptId,desigId,kppObjective,kppPerformanceIndi, kppOverallTarget,kppTargetPeriod,kppUoM,kppOverallWeightage,kppRating1,kppRating2,kppRating3,kppRating4,kppRating5, remark, statusCd };
+        let kpp = { roleId, deptId,desigId,kppObjective,kppPerformanceIndi, kppOverallTarget,kppTargetPeriod,kppUoM,kppOverallWeightage,kppRating1,kppRating2,kppRating3,kppRating4,kppRating5, remark, statusCd };
         console.log(kpp)
 
         KeyParameterService.saveKPPDetails(kpp).then(res => {
@@ -86,10 +107,9 @@ export default function KeyParameterComponent() {
             let kpp = res.data;
             console.log(kpp)
             let kppId=kpp.kppId;
+            let roleId = kpp.roleId;
             let deptId=kpp.deptId;
-            let deptName=kpp.deptName;
             let desigId=kpp.desigId;
-            let desigName=kpp.desigName;
             let kppObjective=kpp.kppObjective;
             let kppPerformanceIndi=kpp.kppPerformanceIndi;
             let kppOverallTarget=kpp.kppOverallTarget;
@@ -106,7 +126,7 @@ export default function KeyParameterComponent() {
            console.log("deptId",deptId)
            console.log("KppId=",kppId)
             let statusCd = 'I';
-            let updateKpp = {kppId,deptId,desigId ,kppObjective,kppPerformanceIndi,kppOverallTarget,kppTargetPeriod,kppUoM,kppOverallWeightage,kppRating1,kppRating2,kppRating3,kppRating4,kppRating5, remark, statusCd };
+            let updateKpp = {roleId, kppId,deptId,desigId ,kppObjective,kppPerformanceIndi,kppOverallTarget,kppTargetPeriod,kppUoM,kppOverallWeightage,kppRating1,kppRating2,kppRating3,kppRating4,kppRating5, remark, statusCd };
 
             KeyParameterService.updateKppDetails(updateKpp).then(res => {
                 KeyParameterService.getKPPDetailsByPaging().then((res) => {
@@ -123,7 +143,7 @@ export default function KeyParameterComponent() {
 
         e.preventDefault()
         let statusCd = 'A';
-        let updateKpp = {kppId,deptId,desigId ,kppObjective,kppPerformanceIndi,kppOverallTarget,kppTargetPeriod,kppUoM,kppOverallWeightage,kppRating1,kppRating2,kppRating3,kppRating4,kppRating5, remark, statusCd };
+        let updateKpp = {kppId,roleId, deptId,desigId ,kppObjective,kppPerformanceIndi,kppOverallTarget,kppTargetPeriod,kppUoM,kppOverallWeightage,kppRating1,kppRating2,kppRating3,kppRating4,kppRating5, remark, statusCd };
         
         KeyParameterService.updateKppDetails(updateKpp).then(res => {
             KeyParameterService.getKPPDetailsByPaging().then((res) => {
@@ -159,6 +179,7 @@ export default function KeyParameterComponent() {
                     <thead>
                         <tr>
                             <th>Sr No</th>
+                            <th>Role Name</th>
                             <th>Department Name</th>
                             <th>Designation Name</th>
                             <th>KPP Objective</th>
@@ -172,6 +193,7 @@ export default function KeyParameterComponent() {
                                         (kpp, index) =>   //index is inbuilt variable of map started with 0
                                             <tr key={kpp.kppId}>
                                                 <td>{index + 1}</td>
+                                                <td>{kpp.roleName}</td>
                                                 <td>{kpp.deptName}</td>
                                                 <td>{kpp.desigName}</td>
                                                 <td className="text-justify">{kpp.kppObjective}</td>
@@ -202,6 +224,25 @@ export default function KeyParameterComponent() {
                     </div>
                     <div className="modal-body">
                         <form className="form-horizontal">
+
+                            <div className="form-group">
+                                <label className="control-label col-sm-4" htmlFor="deptId">Select Department Name:</label>
+                                <div className="col-sm-4">
+                                    <div className="form-group">
+                                    <select className="form-control" id="roleId" onChange={(e) => setRoleId(e.target.value)}>
+                                        <option>--Select Role--</option>
+                                                    {
+                                                        roles.map(
+                                                            role =>
+                                                                <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
+                                                        )
+                                                    };
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div className="form-group">
                                 <label className="control-label col-sm-4" htmlFor="deptId">Select Department Name:</label>
                                 <div className="col-sm-4">
@@ -227,9 +268,9 @@ export default function KeyParameterComponent() {
                                         <select className="form-control" id="desigId"  onChange={(e) => setDesigId(e.target.value)}>
                                         <option>--Select Designation--</option>
                                                     {
-                                                        departments.map(
-                                                            department =>
-                                                                <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
+                                                        designations.map(
+                                                            designation =>
+                                                                <option key={designation.desigId} value={designation.desigId}>{designation.desigName}</option>
                                                         )
                                                     };
 
@@ -348,6 +389,13 @@ export default function KeyParameterComponent() {
                     <div className="modal-body">
                         <form className="form-horizontal">
                         <div> <input type="hidden" id="kppId" name="kppId" value={kppId} /></div>
+                        <div className="form-group">
+                            <div> <input type="hidden" id="roleId" name="roleId" value={roleId} /></div>
+                                <label className="control-label col-sm-4" htmlFor="roleName">Select Role Name:</label>
+                                <div className="col-sm-4">
+                                    {roleName}
+                                </div>
+                            </div>
                             <div className="form-group">
                             <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
                                 <label className="control-label col-sm-4" htmlFor="deptName">Select Department Name:</label>
@@ -467,11 +515,18 @@ export default function KeyParameterComponent() {
                 <div className="modal-content">
                     <div className="modal-header">
                         <button type="button" className="close" data-dismiss="modal">&times;</button>
-                        <h4 className="modal-title">Add Key Parameter</h4>
+                        <h4 className="modal-title">Key Parameter Details</h4>
                     </div>
                     <div className="modal-body">
                         <form className="form-horizontal">
                         
+                        <div className="form-group">
+                                <label className="control-label col-sm-4" htmlFor="roleName">Role Name:</label>
+                                <div className="col-sm-4">
+                                {roleName}
+                                </div>
+                            </div>
+
                             <div className="form-group">
                                 <label className="control-label col-sm-4" htmlFor="deptName">Department Name:</label>
                                 <div className="col-sm-4">
@@ -575,7 +630,6 @@ export default function KeyParameterComponent() {
                         </form>
                     </div>
                     <div className="modal-footer">
-                        <button type="submit" className="btn btn-success"  data-dismiss="modal" onClick={(e) => saveKPPDetails(e)}> Submit</button>
                         <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>

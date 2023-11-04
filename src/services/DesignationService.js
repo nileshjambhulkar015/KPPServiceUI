@@ -11,6 +11,12 @@ class DesignationService {
         return axios.get(DEPARTMENT_URL)
     }
 
+    //get all designation from department id for dropdown list
+    getDesignationDetailsForKpp(deptId) {
+        return axios.get(DESIGNATION_URL + '/by/' + deptId)
+    }
+
+
 
     getDesignationDetailsByPaging() {
         return axios.get("http://localhost:9091/designation/search?statusCd=A&page=0&size=20&sort=role.role_id")

@@ -27,14 +27,20 @@ class DepartmentService{
 
     //Get all roles present in department table for designation form
     getRolesInDept(){
-        return axios.get("http://localhost:9091/department/role")
+        return axios.get("http://localhost:9091/roles/department/role")
     }
 
        //Get all roles present in department table for designation form
        getDepartmentByRoleId(roleId){
         console.log(roleId);
-        return axios.get(BASE_URL+'/roleId/'+roleId)
+        return axios.get(BASE_URL+'/dept/'+roleId)
     }
+
+         //Get all roles present in department table from designation for KPP
+         getDepartmentByRoleIdFromDesign(roleId){
+            console.log(roleId);
+            return axios.get(BASE_URL+'/desig/'+roleId)
+        }
     /*getDpartmentDetailsByPagingByDate(e){
         return axios.get(`http://localhost:9091/department/search?searchEnum=BY_STATUS&searchString=${e}&statusCdEnum=A&page=0&size=20&sort=deptName`)
     }*/

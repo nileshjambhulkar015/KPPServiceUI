@@ -8,14 +8,21 @@ const BASE_URL = "http://localhost:9091/employee";
 
 class EmployeeService {
 
-    getDpartmentDetails() {
-        return axios.get(DEPARTMENT_URL)
+     //Get all roles present in designation table 
+     getRolesInDesignation(){
+        return axios.get("http://localhost:9091/roles/designation/roles")
     }
 
-    getDesignationByDeptId(deptId) {
+
+
+    /*getDpartmentDetails() {
+        return axios.get(DEPARTMENT_URL)
+    }*/
+
+  /*  getDesignationByDeptId(deptId) {
      console.log(DESIGNATION_URL)
         return axios.get(`http://localhost:9091/designation/by/${deptId}`)
-    }
+    }*/
     
     saveEmployeeDetails(employee) {
         return axios.post(BASE_URL, employee)
@@ -27,13 +34,13 @@ class EmployeeService {
 
     getEmployeeById(empId) {
         console.log(empId)
-        return axios.get(BASE_URL + '/empId?empId=' + empId)
+        return axios.get(BASE_URL + '/' + empId)
     }
 
-    getDepartmentById(deptId) {
+    /*getDepartmentById(deptId) {
         console.log("grt call")
         return axios.get(BASE_URL + '/' + deptId)
-    }
+    }*/
 
     updateEmployeeDetails(employee) {
 

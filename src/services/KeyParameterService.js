@@ -7,6 +7,7 @@ const BASE_URL="http://localhost:9091/key-perform-parameter";
 
 class KeyParameterService{
 
+    
     getDpartmentDetails(){
         return axios.get(DEPARTMENT_URL)
     }
@@ -26,7 +27,7 @@ class KeyParameterService{
     
     getKppById(kppId){
  console.log(kppId)
-        return axios.get(BASE_URL+'/kppId?kppId='+kppId)
+        return axios.get(BASE_URL+'/'+kppId)
     }
     
     getDepartmentById(deptId){
