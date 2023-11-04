@@ -13,6 +13,7 @@ export default function EmployeeComponent() {
     const [deptName, setDeptName] = useState('');
     const [desigId, setDesigId] = useState('');
     const [desigName, setDesigName] = useState('');
+    const [reportingEmpId, setReportingEmpId] = useState('');
     const [regionId, setRegionId] = useState('');
     const [regionName, setRegionName] = useState('');
     const [siteId, setSiteId] = useState('');
@@ -43,7 +44,7 @@ export default function EmployeeComponent() {
         let roleId ='1';
         let regionId='1';
         let siteId = '1';
-        let employee = { roleId,deptId,desigId,regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
+        let employee = { roleId,deptId,desigId,reportingEmpId,regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
         console.log(employee)
     
         EmployeeService.saveEmployeeDetails(employee).then(res => {
@@ -94,7 +95,8 @@ export default function EmployeeComponent() {
             setDeptId(employee.deptId)
             setDeptName(employee.deptName)
             setDesigId(employee.desigId)
-            setDesigName(employee.desigName)         
+            setDesigName(employee.desigName)  
+            setReportingEmpId(employee.reportingEmpId)       
             setRegionId(employee.regionId)
             setRegionName(employee.regionName)
             setSiteId(employee.siteId)
@@ -127,7 +129,8 @@ export default function EmployeeComponent() {
             setDeptId(employee.deptId)
             setDeptName(employee.deptName)
             setDesigId(employee.desigId)
-            setDesigName(employee.desigName)         
+            setDesigName(employee.desigName)  
+            setReportingEmpId(employee.reportingEmpId)              
             setRegionId(employee.regionId)
             setRegionName(employee.regionName)
             setSiteId(employee.siteId)
@@ -148,7 +151,7 @@ export default function EmployeeComponent() {
             
             let statusCd = 'I';
             
-            let employeeData = {empId, empEId,roleId, deptId,desigId,regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
+            let employeeData = {empId, empEId,roleId, deptId,desigId,reportingEmpId, regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
             EmployeeService.updateEmployeeDetails(employeeData).then(res => {
                 EmployeeService.getEmployeeDetailsByPaging().then((res) => {
                     setEmployees(res.data.responseData.content);
@@ -167,7 +170,7 @@ export default function EmployeeComponent() {
         let roleId ='1';
         let regionId='1';
         let siteId = '1';
-        let employeeData = {empId,  empEId,roleId,deptId,desigId,regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
+        let employeeData = {empId,  empEId,roleId,deptId,desigId,reportingEmpId,regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
         
         EmployeeService.updateEmployeeDetails(employeeData).then(res => {
             EmployeeService.getEmployeeDetailsByPaging().then((res) => {
@@ -300,6 +303,15 @@ export default function EmployeeComponent() {
                                                     };
 
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="control-label col-sm-4" htmlFor="deptId">Enter Reporting Employee Name:</label>
+                                <div className="col-sm-4">
+                                    <div className="form-group">
+                                    <input type="text" className="form-control" id="empFirstName" value={reportingEmpId} onChange={(e) => setReportingEmpId(e.target.value)} placeholder="Enter Reporting Employee  Name here"  />
                                     </div>
                                 </div>
                             </div>
