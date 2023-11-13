@@ -88,6 +88,7 @@ export default function KeyParameterComponent() {
 
     const saveKPPDetails = (e) => {
         e.preventDefault()
+       
         let statusCd = 'A';
         let kpp = { roleId, deptId,desigId,kppObjective,kppPerformanceIndi, kppOverallTarget,kppTargetPeriod,kppUoM,kppOverallWeightage,kppRating1,kppRating2,kppRating3,kppRating4,kppRating5, remark, statusCd };
         console.log(kpp)
@@ -179,9 +180,10 @@ export default function KeyParameterComponent() {
                     <thead>
                         <tr>
                             <th>Sr No</th>
-                            <th>Role Name</th>
+                          
                             <th>Department Name</th>
                             <th>Designation Name</th>
+                            <th>Role Name</th>
                             <th>KPP Objective</th>
                             <th>Performance Indicator</th>
                             <th>Action</th>
@@ -193,9 +195,10 @@ export default function KeyParameterComponent() {
                                         (kpp, index) =>   //index is inbuilt variable of map started with 0
                                             <tr key={kpp.kppId}>
                                                 <td>{index + 1}</td>
-                                                <td>{kpp.roleName}</td>
+                                               
                                                 <td>{kpp.deptName}</td>
                                                 <td>{kpp.desigName}</td>
+                                                <td>{kpp.roleName}</td>
                                                 <td className="text-justify">{kpp.kppObjective}</td>
                                                 <td className="text-justify">{kpp.kppPerformanceIndi}</td>
                                                 <td className="col-sm-3"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateKpp" onClick={() => showKppById(kpp.kppId)}>Update</button>

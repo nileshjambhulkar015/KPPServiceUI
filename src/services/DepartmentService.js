@@ -22,7 +22,7 @@ class DepartmentService{
         return axios.put(BASE_URL, department)
     }
     getDpartmentDetailsByPaging(){
-        return axios.get("http://localhost:9091/department/search?statusCd=A&page=0&size=20&sort=role.role_name")
+        return axios.get("http://localhost:9091/department/search?statusCd=A&page=0&size=20&sort=role.role_name asc")
     }
 
     //Get all roles present in department table for designation form

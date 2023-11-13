@@ -124,6 +124,8 @@ export default function DepartmentComponent() {
                                 <tr>
                                     <th>Sr No</th>
                                     <th>Department Name</th>
+                                    <th>Role Name</th>
+                              
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -133,8 +135,9 @@ export default function DepartmentComponent() {
                                         (department, index) =>   //index is inbuilt variable of map started with 0
                                             <tr key={department.deptId}>
                                                 <td>{index + 1}</td>
-                                                <td>{department.roleName}</td>
                                                 <td>{department.deptName}</td>
+                                                <td>{department.roleName}</td>
+                                           
                                                 <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateDepartment" onClick={() => showDepartmentById(department.deptId)}>Update</button>
                                                     <button type="submit" className="btn col-sm-offset-1 btn-info" onClick={() => deleteDepartmentById(department.deptId)}>Delete</button>
                                                     <button type="submit" className="btn col-sm-offset-1 btn-danger" data-toggle="modal" data-target="#showData" onClick={() => showDepartmentById(department.deptId)}>View</button></td>

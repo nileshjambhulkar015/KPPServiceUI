@@ -144,9 +144,10 @@ export default function DesignationComponent() {
                         <thead>
                             <tr>
                                 <th>Sr No</th>
-                                <th>Role Name</th>
+                              
                                 <th>Department Name</th>
                                 <th>Designation Name</th>
+                                <th>Role Name</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -156,9 +157,10 @@ export default function DesignationComponent() {
                                         (designation, index) =>   //index is inbuilt variable of map started with 0
                                             <tr key={designation.desigId}>
                                                 <td>{index + 1}</td>
-                                                <td>{designation.roleName}</td>
+                                              
                                                 <td>{designation.deptName}</td>
                                                 <td>{designation.desigName}</td>
+                                                <td>{designation.roleName}</td>
                                                 <td className="col-sm-3"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateDesignation" onClick={() => showDesignationById(designation.desigId)}>Update</button>
                                                     <button type="submit" className="btn col-sm-offset-1 btn-info" onClick={() => deleteDesignationById(designation.desigId)}>Delete</button>
                                                     <button type="submit" className="btn col-sm-offset-1 btn-danger" data-toggle="modal" data-target="#showDesignation" onClick={() => showDesignationById(designation.desigId)}>View</button></td>

@@ -41,7 +41,6 @@ export default function EmployeeComponent() {
     const saveEmployeeDetails = (e) => {
         e.preventDefault()
         let statusCd = 'A';
-        let roleId ='1';
         let regionId='1';
         let siteId = '1';
         let employee = { roleId,deptId,desigId,reportingEmpId,regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
@@ -167,7 +166,6 @@ export default function EmployeeComponent() {
 
         e.preventDefault()
         let statusCd = 'A';
-        let roleId ='1';
         let regionId='1';
         let siteId = '1';
         let employeeData = {empId,  empEId,roleId,deptId,desigId,reportingEmpId,regionId,siteId,empFirstName,empMiddleName,empLastName,empDob,empMobileNo,empEmerMobileNo,empPhoto,emailId,tempAddress,permAddress,empGender,empBloodgroup,remark, statusCd };
@@ -192,7 +190,7 @@ export default function EmployeeComponent() {
                 <div className="col-sm-8">
                     <form className="form-horizontal">
                         <div className="form-group">
-                            <label className="control-label col-sm-3" htmlFor="email">Department Search:</label>
+                            <label className="control-label col-sm-3" htmlFor="email">Employee Search:</label>
                             <div className="col-sm-4">
                                 <input type="text" className="form-control" id="deptName" placeholder="Enter Employee Name" />
                             </div>
@@ -209,9 +207,10 @@ export default function EmployeeComponent() {
                         <th>Sr No</th>
                             <th>Employee Name</th>
                             <th>Employee Id</th>
-                            <th>Role Name</th>
+                           
                             <th>Department Name</th>
                             <th>Designation Name</th>
+                            <th>Role Name</th>
                             <th>Mobile No</th>
                             <th>Email Id</th>
                             <th>Action</th>
@@ -225,9 +224,10 @@ export default function EmployeeComponent() {
                                                 <td>{index + 1}</td>
                                                 <td className="text-justify">{employee.empFirstName + ' '+employee.empMiddleName+' '+employee.empLastName}</td>
                                                 <td>{employee.empEId}</td>
-                                                <td>{employee.roleName}</td>
+                                               
                                                 <td>{employee.deptName}</td>
                                                 <td>{employee.desigName}</td>
+                                                <td>{employee.roleName}</td>
                                                 <td className="text-justify">{employee.empMobileNo}</td>
                                                 <td className="text-justify">{employee.emailId}</td>
                                                 <td className="col-sm-3"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateEmployee" onClick={() => showEmployeeById(employee.empId)}>Update</button>
