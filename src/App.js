@@ -8,10 +8,12 @@ import DesignationComponent from './components/DesignationComponent/DesignationC
 import DepartmentComponent from './components/DepartmentComponent/DepartmentComponent';
 import EmployeeKppComponent from "./components/EmployeeKppsComponent/EmployeeKppsComponent";
 import RoleComponent from "./components/RoloComponent/RoleComponent";
-
+import Cookies from 'js-cookie';
 
 function App() {
+ 
   return (
+    
     <BrowserRouter>
     <nav className="navbar navbar-inverse">
       <div className="container-fluid">
@@ -29,7 +31,7 @@ function App() {
           
         </ul>
         <ul className="nav navbar-nav navbar-right">
-          <li><a href="#"><span className="glyphicon glyphicon-user"></span> e1234</a></li>
+        <li><a href="#">Welcome: {Cookies.get('empEId')}</a></li>
           <li> <a href="http://localhost:3008" >Logout </a></li>
         </ul>
       </div>
