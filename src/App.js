@@ -1,5 +1,5 @@
 import React from "react";
-import {Route, BrowserRouter as Router, Link, Switch} from 'react-router-dom';
+import {Route, BrowserRouter, Link, Routes} from 'react-router-dom';
 import KeyParameterComponent from './components/KeyParameterComponent/KeyParameterComponent';
 
 import EmployeeComponent from './components/EmployeeComponent/EmployeeComponent';
@@ -11,7 +11,7 @@ import RoleComponent from "./components/RoloComponent/RoleComponent";
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
     <nav className="navbar navbar-inverse">
       <div className="container-fluid">
         <div className="navbar-header">
@@ -33,17 +33,17 @@ function App() {
         </ul>
       </div>
     </nav>
-    <Switch>
+    <Routes>
       
-    <Route exact path="/" component={DepartmentComponent}></Route>
-    <Route exact path="/role" component={RoleComponent}></Route>
-      <Route exact path="/department" component={DepartmentComponent}></Route>
-      <Route exact path="/designation" component={DesignationComponent}></Route>
-      <Route exact path="/employee" component={EmployeeComponent}></Route>
-      <Route exact path="/keyparemeter" component={KeyParameterComponent} ></Route>
-      <Route exact path="/employeekpp" component={EmployeeKppComponent}></Route>
-    </Switch>
-  </Router>    
+    <Route exact path="/" element={<DepartmentComponent />}></Route>
+    <Route exact path="/role" element={<RoleComponent/>}></Route>
+      <Route exact path="/department" element={<DepartmentComponent/>}></Route>
+      <Route exact path="/designation" element={<DesignationComponent/>}></Route>
+      <Route exact path="/employee" element={<EmployeeComponent/>}></Route>
+      <Route exact path="/keyparemeter" element={<KeyParameterComponent/>} ></Route>
+      <Route exact path="/employeekpp" element={<EmployeeKppComponent/>}></Route>
+    </Routes>
+  </BrowserRouter>    
   );
 }
 

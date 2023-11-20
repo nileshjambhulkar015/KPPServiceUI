@@ -253,23 +253,23 @@ export default function EmployeeComponent() {
                     </div>
                     <div className="modal-body">
                         <form className="form-horizontal">                      
-                        <div className="form-group">
-                                <label className="control-label col-sm-4" htmlFor="deptId">Select Department Name:</label>
-                                <div className="col-sm-4">
-                                    <div className="form-group">
-                                    <select className="form-control" id="roleId" onChange={(e) => setRoleId(e.target.value)}>
-                                        <option>--Select Role--</option>
-                                                    {
-                                                        roles.map(
-                                                            role =>
-                                                                <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
-                                                        )
-                                                    };
+                            <div className="form-group">
+                                    <label className="control-label col-sm-4" htmlFor="deptId">Select Role Name:</label>
+                                    <div className="col-sm-4">
+                                        <div className="form-group">
+                                        <select className="form-control" id="roleId" onChange={(e) => setRoleId(e.target.value)}>
+                                            <option>--Select Role--</option>
+                                                        {
+                                                            roles.map(
+                                                                role =>
+                                                                    <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
+                                                            )
+                                                        };
 
-                                        </select>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
                             <div className="form-group">
                                 <label className="control-label col-sm-4" htmlFor="deptId">Select Department Name:</label>
