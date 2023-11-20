@@ -111,7 +111,7 @@ export default function RoleComponent() {
                             <thead>
                                 <tr>
                                     <th>Sr No</th>
-                                    <th>Department Name</th>
+                                    <th>Role Name</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

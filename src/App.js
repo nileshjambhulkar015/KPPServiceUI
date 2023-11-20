@@ -9,16 +9,17 @@ import DepartmentComponent from './components/DepartmentComponent/DepartmentComp
 import EmployeeKppComponent from "./components/EmployeeKppsComponent/EmployeeKppsComponent";
 import RoleComponent from "./components/RoloComponent/RoleComponent";
 
+
 function App() {
   return (
     <BrowserRouter>
     <nav className="navbar navbar-inverse">
       <div className="container-fluid">
         <div className="navbar-header">
-          <a className="navbar-brand" href="#">FutureBizops</a>
+          <a className="navbar-brand" href="http://localhost:3008">FutureBizops</a>
         </div>
         <ul className="nav navbar-nav">
-          <li className="active"><a href="#">Home</a></li>
+       
           <li><Link to="/role">Role</Link></li>
           <li><Link to="/department">Department</Link></li>
           <li><Link to="/designation">Designation</Link></li>
@@ -29,13 +30,13 @@ function App() {
         </ul>
         <ul className="nav navbar-nav navbar-right">
           <li><a href="#"><span className="glyphicon glyphicon-user"></span> e1234</a></li>
-          <li><a href="#"><span className="glyphicon glyphicon-log-in"></span> Login</a></li>
+          <li> <a href="http://localhost:3008" >Logout </a></li>
         </ul>
       </div>
     </nav>
     <Routes>
       
-    <Route exact path="/" element={<DepartmentComponent />}></Route>
+    <Route exact path="/" element={<RoleComponent />}></Route>
     <Route exact path="/role" element={<RoleComponent/>}></Route>
       <Route exact path="/department" element={<DepartmentComponent/>}></Route>
       <Route exact path="/designation" element={<DesignationComponent/>}></Route>
