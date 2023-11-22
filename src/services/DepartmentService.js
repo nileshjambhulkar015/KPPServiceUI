@@ -25,6 +25,10 @@ class DepartmentService{
         return axios.get("http://localhost:9091/department/search?statusCd=A&page=0&size=20&sort=role.role_name asc")
     }
 
+    getDpartmentDetailsByDeptNamePaging(deptName){
+        return axios.get(`http://localhost:9091/department/search?deptName=${deptName}&statusCd=A&page=0&size=20&sort=dept.dept_name`)
+    }
+
     //Get all roles present in department table for designation form
     getRolesInDept(){
         return axios.get("http://localhost:9091/roles/department/role")
@@ -41,9 +45,6 @@ class DepartmentService{
             console.log(roleId);
             return axios.get(BASE_URL+'/desig/'+roleId)
         }
-    /*getDpartmentDetailsByPagingByDate(e){
-        return axios.get(`http://localhost:9091/department/search?searchEnum=BY_STATUS&searchString=${e}&statusCdEnum=A&page=0&size=20&sort=deptName`)
-    }*/
    
 }
 

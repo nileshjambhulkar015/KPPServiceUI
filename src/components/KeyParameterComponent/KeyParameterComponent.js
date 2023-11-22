@@ -32,7 +32,15 @@ export default function KeyParameterComponent() {
     const [designations, setDesignations] = useState([])
     const [roles, setRoles] = useState([])
 
-    
+    const [kppObjectiveSearch, setKppObjectiveSearch] = useState('');
+   
+    const searchKppObjective = (e) => {
+        KeyParameterService.getKPPDetailsByKppObjectivePaging(e).then((res) => {
+            setKpps(res.data.responseData.content);
+            console.log(res.data)
+        });
+    }
+
     const showKppById = (e) => {
 
         KeyParameterService.getKppById(e).then(res => {
@@ -162,16 +170,16 @@ export default function KeyParameterComponent() {
         <div className="col-md-2"></div>
         <div className="col-md-8">
             <div className="row">
-                <div className="col-sm-8">
-                    <form className="form-horizontal" action="">
-                        <div className="form-group">
-                            <label className="control-label col-sm-3" htmlFor="email">Department Search:</label>
-                            <div className="col-sm-4">
-                                <input type="text" className="form-control" id="deptName" placeholder="Enter Department Name" />
+                <div className="col-sm-8"> 
+                <div className="form-group">
+                                <form className="form-horizontal">
+                                    <label className="control-label col-sm-3" htmlFor="kppObjectiveSearch">Enter Role Name:</label>
+                                    <div className="col-sm-4">
+                                        <input type="text" className="form-control" id="kppObjectiveSearch" placeholder="Enter Role Name"  value={kppObjectiveSearch} onChange={(e) => setKppObjectiveSearch(e.target.value)}/>
+                                    </div>
+                                </form>
+                                <button type="submit" className="btn btn-primary" onClick={() => searchKppObjective(kppObjectiveSearch)}>Search</button>
                             </div>
-                            <button type="submit" className="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
                 </div>
                 <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveKpp">Add Key Parameter</button></div>
             </div>
@@ -202,8 +210,8 @@ export default function KeyParameterComponent() {
                                                 <td className="text-justify">{kpp.kppObjective}</td>
                                                 <td className="text-justify">{kpp.kppPerformanceIndi}</td>
                                                 <td className="col-sm-3"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateKpp" onClick={() => showKppById(kpp.kppId)}>Update</button>
-                                                    <button type="submit" className="btn col-sm-offset-1 btn-info" onClick={() => deleteKppById(kpp.kppId)}>Delete</button>
-                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" data-toggle="modal" data-target="#showKpp" onClick={() => showKppById(kpp.kppId)}>View</button></td>
+                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteKppById(kpp.kppId)}>Delete</button>
+                                                    <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showKpp" onClick={() => showKppById(kpp.kppId)}>View</button></td>
                                                 
                                             </tr>
                                     )

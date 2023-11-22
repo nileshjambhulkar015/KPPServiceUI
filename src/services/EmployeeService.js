@@ -32,6 +32,10 @@ class EmployeeService {
         return axios.get("http://localhost:9091/employee/search?statusCd=A&page=0&size=20&sort=emp.emp_fname");
     }
 
+    getEmployeeDetailsByEmpFirstNamePaging(empFirstName){
+        return axios.get(`http://localhost:9091/employee/search?empFirstName=${empFirstName}&statusCd=A&page=0&size=20&sort=emp.emp_name`)
+    }
+
     getEmployeeById(empId) {
         console.log(empId)
         return axios.get(BASE_URL + '/' + empId)
@@ -47,6 +51,12 @@ class EmployeeService {
         return axios.put(BASE_URL, employee)
     }
 
+    getEmployeeSuggest(roleId) {
+        console.log("EmployeeService"+roleId)
+      
+       // return axios.get("http://localhost:9091/employee/suggest?roleId="+roleId+"&deptId="+deptId+"&desigId="+desigId);
+       return axios.get("http://localhost:9091/employee/suggest?roleId="+roleId);
+    }
 
 
 }

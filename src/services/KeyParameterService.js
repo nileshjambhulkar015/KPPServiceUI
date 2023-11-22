@@ -25,6 +25,11 @@ class KeyParameterService{
         return axios.get("http://localhost:9091/key-perform-parameter/search?statusCd=A&page=0&size=20&sort=dept.dept_name");
     }
     
+
+    getKPPDetailsByKppObjectivePaging(kppObjective){
+        return axios.get(`http://localhost:9091/key-perform-parameter/search?kppObjective=${kppObjective}&statusCd=A&page=0&size=20&sort=dept.dept_name`)
+    }
+
     getKppById(kppId){
  console.log(kppId)
         return axios.get(BASE_URL+'/'+kppId)

@@ -13,6 +13,8 @@ export default function DesignationComponent() {
     const [desigName, setDesigName] = useState('');
     const [remark, setRemark] = useState('');
 
+    const [desigNameSearch, setDesigNameSearch] = useState('');
+
     const [designations, setDesignations] = useState([])
     const [departments, setDepartments] = useState([])
     const [roles, setRoles] = useState([])
@@ -25,13 +27,15 @@ export default function DesignationComponent() {
 
         DepartmentService.getRolesInDept().then((res) => {
             setRoles(res.data);
-        });
-
-       /* DesignationService.getDpartmentDetails().then((res) => {
-            setDepartments(res.data);
-        });*/
+        });      
     }, []);
 
+    const searchDesigName = (e) => {
+        DesignationService.getDesignationDetailsByDesigNamePaging(e).then((res) => {
+            setDesignations(res.data.responseData.content);
+            console.log(res.data)
+        });
+    }
     //for all department by role id
     useEffect((e)=>{
         roleId && DepartmentService.getDepartmentByRoleId(roleId).then((res) => {
@@ -126,15 +130,15 @@ export default function DesignationComponent() {
             <div className="col-md-8">
                 <div className="row">
                     <div className="col-sm-8">
-                        <form className="form-horizontal">
-                            <div className="form-group">
-                                <label className="control-label col-sm-3" htmlFor="email">Designation Search:</label>
-                                <div className="col-sm-4">
-                                    <input type="text" className="form-control" id="deptName" placeholder="Enter Designation Name" />
-                                </div>
-                                <button type="submit" className="btn btn-primary">Search</button>
+                    <div className="form-group">
+                                <form className="form-horizontal">
+                                    <label className="control-label col-sm-4" htmlFor="desigNameSearch">Enter Designation Name:</label>
+                                    <div className="col-sm-4">
+                                        <input type="text" className="form-control" id="desigNameSearch" placeholder="Enter Role Name"  value={desigNameSearch} onChange={(e) => setDesigNameSearch(e.target.value)}/>
+                                    </div>
+                                </form>
+                                <button type="submit" className="btn btn-primary" onClick={() => searchDesigName(desigNameSearch)}>Search</button>
                             </div>
-                        </form>
                     </div>
                     <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveDesignation">Add Designation</button></div>
                 </div>
@@ -162,8 +166,8 @@ export default function DesignationComponent() {
                                                 <td>{designation.desigName}</td>
                                                 <td>{designation.roleName}</td>
                                                 <td className="col-sm-3"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateDesignation" onClick={() => showDesignationById(designation.desigId)}>Update</button>
-                                                    <button type="submit" className="btn col-sm-offset-1 btn-info" onClick={() => deleteDesignationById(designation.desigId)}>Delete</button>
-                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" data-toggle="modal" data-target="#showDesignation" onClick={() => showDesignationById(designation.desigId)}>View</button></td>
+                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteDesignationById(designation.desigId)}>Delete</button>
+                                                    <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showDesignation" onClick={() => showDesignationById(designation.desigId)}>View</button></td>
                                             </tr>
                                     )
                                 } 

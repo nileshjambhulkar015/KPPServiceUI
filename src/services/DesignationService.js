@@ -22,7 +22,10 @@ class DesignationService {
         return axios.get("http://localhost:9091/designation/search?statusCd=A&page=0&size=20&sort=role.role_id")
     }
 
-
+    
+    getDesignationDetailsByDesigNamePaging(desigName){
+        return axios.get(`http://localhost:9091/designation/search?desigName=${desigName}&statusCd=A&page=0&size=20&sort=desig.desigName`)
+    }
     saveDesignationDetails(designation) {
         return axios.post(DESIGNATION_URL, designation)
     }
