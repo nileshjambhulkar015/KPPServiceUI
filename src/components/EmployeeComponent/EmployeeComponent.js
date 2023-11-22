@@ -209,9 +209,9 @@ export default function EmployeeComponent() {
                     <div className="col-sm-8">      
                     <div className="form-group">
                                 <form className="form-horizontal">
-                                    <label className="control-label col-sm-3" htmlFor="empFirstNameSearch">Enter Role Name:</label>
+                                    <label className="control-label col-sm-3" htmlFor="empFirstNameSearch">Enter First Name:</label>
                                     <div className="col-sm-4">
-                                        <input type="text" className="form-control" id="empFirstNameSearch" placeholder="Enter Role Name"  value={empFirstNameSearch} onChange={(e) => setEmpFirstNameSearch(e.target.value)}/>
+                                        <input type="text" className="form-control" id="empFirstNameSearch" placeholder="Enter First Name"  value={empFirstNameSearch} onChange={(e) => setEmpFirstNameSearch(e.target.value)}/>
                                     </div>
                                 </form>
                                 <button type="submit" className="btn btn-primary" onClick={() => searchEmployeeFirstName(empFirstNameSearch)}>Search</button>

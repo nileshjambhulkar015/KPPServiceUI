@@ -134,7 +134,7 @@ export default function DesignationComponent() {
                                 <form className="form-horizontal">
                                     <label className="control-label col-sm-4" htmlFor="desigNameSearch">Enter Designation Name:</label>
                                     <div className="col-sm-4">
-                                        <input type="text" className="form-control" id="desigNameSearch" placeholder="Enter Role Name"  value={desigNameSearch} onChange={(e) => setDesigNameSearch(e.target.value)}/>
+                                        <input type="text" className="form-control" id="desigNameSearch" placeholder="Enter Designation Name"  value={desigNameSearch} onChange={(e) => setDesigNameSearch(e.target.value)}/>
                                     </div>
                                 </form>
                                 <button type="submit" className="btn btn-primary" onClick={() => searchDesigName(desigNameSearch)}>Search</button>
