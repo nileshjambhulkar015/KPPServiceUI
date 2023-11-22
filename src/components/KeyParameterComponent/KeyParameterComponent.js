@@ -173,7 +173,7 @@ export default function KeyParameterComponent() {
                 <div className="col-sm-8"> 
                 <div className="form-group">
                                 <form className="form-horizontal">
-                                    <label className="control-label col-sm-3" htmlFor="kppObjectiveSearch">Enter Role Name:</label>
+                                    <label className="control-label col-sm-3" htmlFor="kppObjectiveSearch">Enter KPP Objective:</label>
                                     <div className="col-sm-4">
                                         <input type="text" className="form-control" id="kppObjectiveSearch" placeholder="Enter Role Name"  value={kppObjectiveSearch} onChange={(e) => setKppObjectiveSearch(e.target.value)}/>
                                     </div>

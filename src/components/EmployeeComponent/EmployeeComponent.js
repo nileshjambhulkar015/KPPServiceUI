@@ -461,6 +461,24 @@ export default function EmployeeComponent() {
                                     </div>
 
                                     <div className="form-group">
+                                        <label className="control-label col-sm-4" htmlFor="desigId">Select Designation Name:</label>
+                                        <div className="col-sm-4">
+                                            <div className="form-group">
+                                                <select className="form-control" id="desigId" onChange={(e) => setDesigId(e.target.value)}>
+                                                    <option>--Select Designation--</option>
+                                                    {
+                                                        designations.map(
+                                                            designation =>
+                                                                <option key={designation.desigId} value={designation.desigId}>{designation.desigName}</option>
+                                                        )
+                                                    };
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group">
                                         <label className="control-label col-sm-4" htmlFor="deptId">Enter Reporting Employee Name:</label>
                                         <div className="col-sm-4">
                                             <div className="form-group">
