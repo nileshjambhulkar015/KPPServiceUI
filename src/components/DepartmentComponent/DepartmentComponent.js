@@ -9,6 +9,8 @@ export default function DepartmentComponent() {
     const [deptName, setDeptName] = useState('');
     const [remark, setRemark] = useState('');
 
+    const [deptNameSearch, setDeptNameSearch] = useState('');
+
     const [departments, setDepartments] = useState([])
     const [roles, setRoles] = useState([])
 
@@ -23,6 +25,12 @@ export default function DepartmentComponent() {
         });
     }, []);
 
+    const searchDeptName = (e) => {
+        DepartmentService.getDpartmentDetailsByDeptNamePaging(e).then((res) => {
+            setDepartments(res.data.responseData.content);
+            console.log(res.data)
+        });
+    }
 
     const saveDepartment = (e) => {
         e.preventDefault()
@@ -105,15 +113,15 @@ export default function DepartmentComponent() {
                 <div className="col-md-8">
                     <div className="row">
                         <div className="col-sm-8">
-
-                            <div className="form-group">
-                                <label className="control-label col-sm-3" htmlFor="email">Department Search:</label>
-                                <div className="col-sm-4">
-                                    <input type="text" className="form-control" id="searchString" placeholder="Enter Department Name" />
-                                </div>
-                                <button type="submit" className="btn btn-primary">Search</button>
+                        <div className="form-group">
+                                <form className="form-horizontal">
+                                    <label className="control-label col-sm-4" htmlFor="deptNameSearch">Enter Department Name:</label>
+                                    <div className="col-sm-4">
+                                        <input type="text" className="form-control" id="deptNameSearch" placeholder="Enter Department Name"  value={deptNameSearch} onChange={(e) => setDeptNameSearch(e.target.value)}/>
+                                    </div>
+                                </form>
+                                <button type="submit" className="btn btn-primary" onClick={() => searchDeptName(deptNameSearch)}>Search</button>
                             </div>
-
                         </div>
                         <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveDepartment">Add Department</button></div>
                     </div>
@@ -139,8 +147,8 @@ export default function DepartmentComponent() {
                                                 <td>{department.roleName}</td>
                                            
                                                 <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateDepartment" onClick={() => showDepartmentById(department.deptId)}>Update</button>
-                                                    <button type="submit" className="btn col-sm-offset-1 btn-info" onClick={() => deleteDepartmentById(department.deptId)}>Delete</button>
-                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" data-toggle="modal" data-target="#showData" onClick={() => showDepartmentById(department.deptId)}>View</button></td>
+                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteDepartmentById(department.deptId)}>Delete</button>
+                                                    <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showData" onClick={() => showDepartmentById(department.deptId)}>View</button></td>
                                             </tr>
                                     )
                                 }

@@ -1,5 +1,5 @@
 import React from "react";
-import {Route, BrowserRouter as Router, Link, Switch} from 'react-router-dom';
+import { Route, BrowserRouter, Link, Routes } from 'react-router-dom';
 import KeyParameterComponent from './components/KeyParameterComponent/KeyParameterComponent';
 
 import EmployeeComponent from './components/EmployeeComponent/EmployeeComponent';
@@ -8,42 +8,58 @@ import DesignationComponent from './components/DesignationComponent/DesignationC
 import DepartmentComponent from './components/DepartmentComponent/DepartmentComponent';
 import EmployeeKppComponent from "./components/EmployeeKppsComponent/EmployeeKppsComponent";
 import RoleComponent from "./components/RoloComponent/RoleComponent";
+import Cookies from 'js-cookie';
 
 function App() {
+
+  const removeCookies = () => {
+    Cookies.remove('empId');
+    Cookies.remove('roleId');
+    Cookies.remove('roleName');
+    Cookies.remove('deptId');
+    Cookies.remove('deptName');
+    Cookies.remove('desigId');
+    Cookies.remove('desigName');
+    Cookies.remove('empEId');
+    Cookies.remove('empFirstName');
+    Cookies.remove('empMiddleName');
+    Cookies.remove('empLastName');
+  }
   return (
-    <Router>
-    <nav className="navbar navbar-inverse">
-      <div className="container-fluid">
-        <div className="navbar-header">
-          <a className="navbar-brand" href="#">FutureBizops</a>
+
+    <BrowserRouter>
+      <nav className="navbar navbar-inverse">
+        <div className="container-fluid">
+          <div className="navbar-header">
+            <a className="navbar-brand" href="http://localhost:3008" onClick={() => removeCookies()}>FutureBizops</a>
+          </div>
+          <ul className="nav navbar-nav">
+
+            <li><Link to="/role">Role</Link></li>
+            <li><Link to="/department">Department</Link></li>
+            <li><Link to="/designation">Designation</Link></li>
+            <li><Link to="/employee">Employee</Link></li>
+            <li><Link to="/keyparemeter">Key Indicator</Link></li>
+            <li><Link to="/employeekpp">Employee KPP</Link></li>
+
+          </ul>
+          <ul className="nav navbar-nav navbar-right">
+            <li><a href="#">Welcome: {Cookies.get('empEId')}</a></li>
+            <li> <a href="http://localhost:3008" onClick={() => removeCookies()} >Logout </a></li>
+          </ul>
         </div>
-        <ul className="nav navbar-nav">
-          <li className="active"><a href="#">Home</a></li>
-          <li><Link to="/role">Role</Link></li>
-          <li><Link to="/department">Department</Link></li>
-          <li><Link to="/designation">Designation</Link></li>
-          <li><Link to="/employee">Employee</Link></li>
-          <li><Link to="/keyparemeter">Key Indicator</Link></li>
-          <li><Link to="/employeekpp">Employee KPP</Link></li>
-          
-        </ul>
-        <ul className="nav navbar-nav navbar-right">
-          <li><a href="#"><span className="glyphicon glyphicon-user"></span> e1234</a></li>
-          <li><a href="#"><span className="glyphicon glyphicon-log-in"></span> Login</a></li>
-        </ul>
-      </div>
-    </nav>
-    <Switch>
-      
-    <Route exact path="/" component={DepartmentComponent}></Route>
-    <Route exact path="/role" component={RoleComponent}></Route>
-      <Route exact path="/department" component={DepartmentComponent}></Route>
-      <Route exact path="/designation" component={DesignationComponent}></Route>
-      <Route exact path="/employee" component={EmployeeComponent}></Route>
-      <Route exact path="/keyparemeter" component={KeyParameterComponent} ></Route>
-      <Route exact path="/employeekpp" component={EmployeeKppComponent}></Route>
-    </Switch>
-  </Router>    
+      </nav>
+      <Routes>
+
+        <Route exact path="/" element={<RoleComponent />}></Route>
+        <Route exact path="/role" element={<RoleComponent />}></Route>
+        <Route exact path="/department" element={<DepartmentComponent />}></Route>
+        <Route exact path="/designation" element={<DesignationComponent />}></Route>
+        <Route exact path="/employee" element={<EmployeeComponent />}></Route>
+        <Route exact path="/keyparemeter" element={<KeyParameterComponent />} ></Route>
+        <Route exact path="/employeekpp" element={<EmployeeKppComponent />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

@@ -6,6 +6,7 @@ export default function RoleComponent() {
     const [roleName, setRoleName] = useState('');
     const [remark, setRemark] = useState('');
 
+    const [roleNameSearch, setRoleNameSearch] = useState('');
     const [roles, setRoles] = useState([])
 
     useEffect(() => {
@@ -15,6 +16,13 @@ export default function RoleComponent() {
         });
     }, []);
 
+    const searchRoleName = (e) => {
+        RoleService.getRolesDetailsByRoleNamePaging(e).then((res) => {
+            setRoles(res.data.responseData.content);
+            console.log(res.data)
+        });
+    }
+    
 
     const saveRole = (e) => {
         e.preventDefault()
@@ -23,10 +31,10 @@ export default function RoleComponent() {
 
         RoleService.saveRolesDetails(role).then(res => {
             console.log("res=", res.data)
-            RoleService.getRolesDetailsByPaging().then((res) => {    
+            RoleService.getRolesDetailsByPaging().then((res) => {
                 setRoles(res.data.responseData.content);
-                    setRoleName('');
-                    setRemark('');
+                setRoleName('');
+                setRemark('');
             });
             console.log("Role added");
         }
@@ -93,25 +101,26 @@ export default function RoleComponent() {
                 <div className="col-md-8">
                     <div className="row">
                         <div className="col-sm-8">
-
                             <div className="form-group">
-                                <label className="control-label col-sm-3" htmlFor="email">Role Search:</label>
-                                <div className="col-sm-4">
-                                    <input type="text" className="form-control" id="searchString" placeholder="Enter Role Name" />
-                                </div>
-                                <button type="submit" className="btn btn-primary">Search</button>
+                                <form className="form-horizontal">
+                                    <label className="control-label col-sm-3" htmlFor="roleNameSearch">Enter Role Name:</label>
+                                    <div className="col-sm-4">
+                                        <input type="text" className="form-control" id="roleNameSearch" placeholder="Enter Role Name"  value={roleNameSearch} onChange={(e) => setRoleNameSearch(e.target.value)}/>
+                                    </div>
+                                </form>
+                                <button type="submit" className="btn btn-primary" onClick={() => searchRoleName(roleNameSearch)}>Search</button>
                             </div>
-
                         </div>
                         <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveRole">Add Role</button></div>
                     </div>
+
                     <div className="row">
 
                         <table className="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Sr No</th>
-                                    <th>Department Name</th>
+                                    <th>Role Name</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -123,8 +132,8 @@ export default function RoleComponent() {
                                                 <td>{index + 1}</td>
                                                 <td>{role.roleName}</td>
                                                 <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateRole" onClick={() => showRoleById(role.roleId)}>Update</button>
-                                                    <button type="submit" className="btn col-sm-offset-1 btn-info" onClick={() => deleteRoleById(role.roleId)}>Delete</button>
-                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" data-toggle="modal" data-target="#showData" onClick={() => showRoleById(role.roleId)}>View</button></td>
+                                                    <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteRoleById(role.roleId)}>Delete</button>
+                                                    <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showData" onClick={() => showRoleById(role.roleId)}>View</button></td>
                                             </tr>
                                     )
                                 }

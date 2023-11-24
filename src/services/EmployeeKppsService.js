@@ -1,14 +1,19 @@
 import axios from "axios";
+import Cookies from 'js-cookie';
 
-const BASE_URL="http://localhost:9091/employee-key-perform-parameter?roleId=1&deptId=1&desigId=1&statusCdEnum=A";
+const BASE_URL = "http://localhost:9091/employee-key-perform-parameter/kpp?roleId=1&deptId=1&desigId=1&statusCdEnum=A";
 
 
-class EmployeeKppsService{
+class EmployeeKppsService {
 
-    getKPPDetails(){
-        return axios.get(BASE_URL)
+    getKPPDetails() {
+        if (null != Cookies.get('empId')) {
+            return axios.get(BASE_URL)
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }
     }
-   
 }
 
 
