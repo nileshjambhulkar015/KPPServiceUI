@@ -186,7 +186,7 @@ export default function EmployeeKppComponent() {
             "ekppStatus": "Pending",  // NEED TO MAKE IT DYNAMIC
             "ekppOverallTaskComp": field === "ekppOverallAchieve" && !!e.target.value ? Number(e.target.value) + Number(kppOverallTarget) : 0,
             "ekppAchivedWeight": field === "ekppOverallAchieve" && !!e.target.value ? Number(e.target.value) + Number(kppOverallTarget) : 0,
-            "ekppOverallAchieve": e.target.value || 0,
+            [field]: e.target.value || 0,
         }
         setTodos(newTodos);
     };
@@ -235,10 +235,9 @@ export default function EmployeeKppComponent() {
                                             <input type="text" className="form-control" name="ekppAchivedWeight" defaultValue={0} value={todos[index]?.ekppAchivedWeight} disabled />
                                         </td>
                                         <td>
-                                            <input
-                                                type="number"
+                                            <input type="number"
                                                 className="form-control"
-                                                name="ekppOverallTaskComp"
+                                                name="ekppOverallAchieve"
                                                 defaultValue={0}
                                                 onChange={event => handleTodoChange(event, index, kppResponse.kppId, kppResponse.kppOverallTarget)}
                                             />
