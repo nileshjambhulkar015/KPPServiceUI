@@ -16,6 +16,9 @@ class DesignationService {
     }
 
     //get all designation from department id for dropdown list
+
+
+    // need to change the service so we can pass two different values with deptId & RoleId
     getDesignationDetailsForKpp(deptId) {
         if (null != Cookies.get('empId')) {
             return axios.get(DESIGNATION_URL + '/by/' + deptId)

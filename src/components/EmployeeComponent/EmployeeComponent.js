@@ -4,7 +4,6 @@ import RoleService from "../../services/RoleService";
 import DepartmentService from "../../services/DepartmentService";
 import DesignationService from "../../services/DesignationService";
 export default function EmployeeComponent() {
-
     const [empId, setEmpId] = useState('');
     const [empEId, setEmpEId] = useState('');
     const [roleId, setRoleId] = useState('');
@@ -29,18 +28,37 @@ export default function EmployeeComponent() {
     const [emailId, setEmailId] = useState('');
     const [tempAddress, setTempAddress] = useState('');
     const [permAddress, setPermAddress] = useState('');
-    const [empGender, setEmpGender] = useState('');
-    const [empBloodgroup, setEmpBloodgroup] = useState('');
+    const [empGender, setEmpGender] = useState('Male');
+    const [empBloodgroup, setEmpBloodgroup] = useState('A+');
     const [remark, setRemark] = useState('');
     const [employeeId, setEmployeeId] = useState('');
-
     const [employees, setEmployees] = useState([])
     const [roles, setRoles] = useState([])
     const [departments, setDepartments] = useState([])
     const [designations, setDesignations] = useState([])
     const [reportings, setReportings] = useState([])
-
     const [empFirstNameSearch, setEmpFirstNameSearch] = useState('');
+
+    const resetForm = () => {
+        setEmpId("")
+        setEmpEId("")
+        setRoleId("")
+        setRoleName("")
+        setDeptId("")
+        setDeptName("")
+        setDesigId("")
+        setReportingEmpIdRole("")
+        setReportingEmpId("")
+        setRegionId("")
+        setRegionName("")
+        setSiteId("")
+        setSiteName("")
+        setEmpFirstName("")
+        setEmpMiddleName("")
+        setEmpBloodgroup("")
+        setRemark("")
+        setEmpFirstNameSearch("")
+    }
 
     const saveEmployeeDetails = (e) => {
         e.preventDefault()
@@ -54,21 +72,19 @@ export default function EmployeeComponent() {
             EmployeeService.getEmployeeDetailsByPaging().then((res) => {
                 setEmployees(res.data.responseData.content);
             });
+            resetForm()
             console.log("Employee added");
         }
         );
-        // window.location.reload(); 
     }
 
     useEffect(() => {
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
             setEmployees(res.data.responseData.content);
         });
-
         RoleService.getRolesInDesignation().then((res) => {
             setRoles(res.data);
         });
-
     }, []);
 
     const searchEmployeeFirstName = (e) => {
@@ -100,9 +116,9 @@ export default function EmployeeComponent() {
             setReportings(res.data);
         });
     }, [reportingEmpIdRole]);
-
+    console.log("")
     const showEmployeeById = (e) => {
-
+        resetForm("");
         EmployeeService.getEmployeeById(e).then(res => {
             let employee = res.data;
             console.log(employee)
@@ -134,9 +150,8 @@ export default function EmployeeComponent() {
             setRemark(employee.remark)
         }
         );
-        // window.location.reload(); 
     }
-
+    console.log(empGender, 'empGender')
     const deleteEmployeeById = (e) => {
         EmployeeService.getEmployeeById(e).then(res => {
             let employee = res.data;
@@ -166,23 +181,22 @@ export default function EmployeeComponent() {
             setEmpGender(employee.empGender)
             setEmpBloodgroup(employee.empBloodgroup)
             setRemark(employee.remark)
-
             let statusCd = 'I';
-
             let employeeData = { empId, empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
             EmployeeService.updateEmployeeDetails(employeeData).then(res => {
                 EmployeeService.getEmployeeDetailsByPaging().then((res) => {
                     setEmployees(res.data.responseData.content);
                 });
                 console.log("Employee deleted");
+                resetForm();
             }
             );
         }
         );
     }
+    console.log("employees", employees)
 
     const updateEmployeeDetails = (e) => {
-
         e.preventDefault()
         let statusCd = 'A';
         let regionId = '1';
@@ -199,23 +213,21 @@ export default function EmployeeComponent() {
     }
 
     return (
-
-
         <div className="row">
             <h2 className="text-center">Employee List</h2>
             <div className="col-md-1"></div>
             <div className="col-md-10">
                 <div className="row">
-                    <div className="col-sm-8">      
-                    <div className="form-group">
-                                <form className="form-horizontal">
-                                    <label className="control-label col-sm-3" htmlFor="empFirstNameSearch">Enter First Name:</label>
-                                    <div className="col-sm-4">
-                                        <input type="text" className="form-control" id="empFirstNameSearch" placeholder="Enter First Name"  value={empFirstNameSearch} onChange={(e) => setEmpFirstNameSearch(e.target.value)}/>
-                                    </div>
-                                </form>
-                                <button type="submit" className="btn btn-primary" onClick={() => searchEmployeeFirstName(empFirstNameSearch)}>Search</button>
-                            </div>
+                    <div className="col-sm-8">
+                        <div className="form-group">
+                            <form className="form-horizontal">
+                                <label className="control-label col-sm-3" htmlFor="empFirstNameSearch">Enter First Name:</label>
+                                <div className="col-sm-4">
+                                    <input type="text" className="form-control" id="empFirstNameSearch" placeholder="Enter First Name" value={empFirstNameSearch} onChange={(e) => setEmpFirstNameSearch(e.target.value)} />
+                                </div>
+                            </form>
+                            <button type="submit" className="btn btn-primary" onClick={() => searchEmployeeFirstName(empFirstNameSearch)}>Search</button>
+                        </div>
                     </div>
                     <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveEmployee">Add New Employee</button></div>
                 </div>
@@ -226,7 +238,6 @@ export default function EmployeeComponent() {
                                 <th>Sr No</th>
                                 <th>Employee Name</th>
                                 <th>Employee Id</th>
-
                                 <th>Department Name</th>
                                 <th>Designation Name</th>
                                 <th>Role Name</th>
@@ -236,25 +247,22 @@ export default function EmployeeComponent() {
                             </tr>
                         </thead>
                         <tbody>
-                            {
-                                employees.map(
-                                    (employee, index) =>   //index is inbuilt variable of map started with 0
-                                        <tr key={employee.empId}>
-                                            <td>{index + 1}</td>
-                                            <td className="text-justify">{employee.empFirstName + ' ' + employee.empMiddleName + ' ' + employee.empLastName}</td>
-                                            <td>{employee.empEId}</td>
-
-                                            <td>{employee.deptName}</td>
-                                            <td>{employee.desigName}</td>
-                                            <td>{employee.roleName}</td>
-                                            <td className="text-justify">{employee.empMobileNo}</td>
-                                            <td className="text-justify">{employee.emailId}</td>
-                                            <td className="col-sm-3"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateEmployee" onClick={() => showEmployeeById(employee.empId)}>Update</button>
-                                                <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteEmployeeById(employee.empId)}>Delete</button>
-                                                <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showEmployee" onClick={() => showEmployeeById(employee.empId)}>View</button></td>
-                                        </tr>
-                                )
-                            }
+                            {employees?.map(
+                                (employee, index) =>   //index is inbuilt variable of map started with 0
+                                    <tr key={employee.empId}>
+                                        <td>{index + 1}</td>
+                                        <td className="text-justify">{employee.empFirstName + ' ' + employee.empMiddleName + ' ' + employee.empLastName}</td>
+                                        <td>{employee.empEId}</td>
+                                        <td>{employee.deptName}</td>
+                                        <td>{employee.desigName}</td>
+                                        <td>{employee.roleName}</td>
+                                        <td className="text-justify">{employee.empMobileNo}</td>
+                                        <td className="text-justify">{employee.emailId}</td>
+                                        <td className="col-sm-3"> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateEmployee" onClick={() => showEmployeeById(employee.empId)}>Update</button>
+                                            <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteEmployeeById(employee.empId)}>Delete</button>
+                                            <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showEmployee" onClick={() => showEmployeeById(employee.empId)}>View</button></td>
+                                    </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
@@ -263,6 +271,7 @@ export default function EmployeeComponent() {
             <div className="col-md-1"></div>
 
             {/* Save Employee Modal */}
+
             <div className="modal fade modal-fullscreen" id="saveEmployee" role="dialog">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
@@ -271,236 +280,221 @@ export default function EmployeeComponent() {
                             <h4 className="modal-title">Add Employee</h4>
                         </div>
                         <div className="modal-body">
-                        <form className="form-horizontal">
-                            <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#home">Employee Information</a></li>
-                                <li><a data-toggle="tab" href="#menu1">Reports To</a></li>                               
-                            </ul>
+                            <form className="form-horizontal" name="save-form">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#home">Employee Information</a></li>
+                                    <li><a data-toggle="tab" href="#menu1">Reports To</a></li>
+                                </ul>
 
-                            <div class="tab-content">
-                                <div id="home" class="tab-pane fade in active">
-
-                                    <div className="form-group">
-                                        <label className="control-label col-sm-4" htmlFor="deptId">Select Role Name:</label>
-                                        <div className="col-sm-4">
-                                            <div className="form-group">
-                                                <select className="form-control" id="roleId" onChange={(e) => setRoleId(e.target.value)}>
-                                                    <option>--Select Role--</option>
-                                                    {
-                                                        roles.map(
+                                <div class="tab-content">
+                                    <div id="home" class="tab-pane fade in active">
+                                        <div className="form-group">
+                                            <label className="control-label col-sm-4" htmlFor="deptId">Select Role Name:</label>
+                                            <div className="col-sm-4">
+                                                <div className="form-group">
+                                                    <select className="form-control select" id="roleId" value={roleId} onChange={(e) => setRoleId(e.target.value)} >
+                                                        <option>--Select Role--</option>
+                                                        {roles.map(
                                                             role =>
                                                                 <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
-                                                        )
-                                                    };
-
-                                                </select>
+                                                        )};
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div className="form-group">
-                                        <label className="control-label col-sm-4" htmlFor="deptId">Select Department Name:</label>
-                                        <div className="col-sm-4">
-                                            <div className="form-group">
-                                                <select className="form-control" id="deptId" onChange={(e) => setDeptId(e.target.value)}>
-                                                    <option>--Select Department--</option>
-                                                    {
-                                                        departments.map(
+                                        <div className="form-group">
+                                            <label className="control-label col-sm-4" htmlFor="deptId">Select Department Name:</label>
+                                            <div className="col-sm-4">
+                                                <div className="form-group">
+                                                    <select className="form-control" id="deptId" onChange={(e) => setDeptId(e.target.value)}>
+                                                        <option>--Select Department--</option>
+                                                        {departments.map(
                                                             department =>
                                                                 <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
-                                                        )
-                                                    };
-
-                                                </select>
+                                                        )};
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div className="form-group">
-                                        <label className="control-label col-sm-4" htmlFor="desigId">Select Designation Name:</label>
-                                        <div className="col-sm-4">
-                                            <div className="form-group">
-                                                <select className="form-control" id="desigId" onChange={(e) => setDesigId(e.target.value)}>
-                                                    <option>--Select Designation--</option>
-                                                    {
-                                                        designations.map(
-                                                            designation =>
-                                                                <option key={designation.desigId} value={designation.desigId}>{designation.desigName}</option>
-                                                        )
-                                                    };
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empFirstName">Employee Name:</label>
-                                            <div className="col-sm-3">
-                                                <input type="text" className="form-control" id="empFirstName" value={empFirstName} onChange={(e) => setEmpFirstName(e.target.value)} placeholder="Enter First Name here" />
-                                            </div>
-
-                                            <div className="col-sm-3">
-                                                <input type="text" className="form-control" id="empMiddleName" value={empMiddleName} onChange={(e) => setEmpMiddleName(e.target.value)} placeholder="Enter Middle Name here" />
-                                            </div>
-
-                                            <div className="col-sm-3">
-                                                <input type="text" className="form-control" id="empLastName" value={empLastName} onChange={(e) => setEmpLastName(e.target.value)} placeholder="Enter Last Name here" />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empDob">Date Of Birth:</label>
-                                            <div className="col-sm-3">
-                                                <input type="date" className="form-control" id="empDob" value={empDob} onChange={(e) => setEmpDob(e.target.value)} />
-
-                                            </div>
-
-                                            <label className="control-label col-sm-2" htmlFor="empPhoto">Upload Photo:</label>
-
-                                            <div className="col-sm-3">
-                                                <input type="file" className="form-control" id="empPhoto" value={empPhoto} onChange={(e) => setEmpPhoto(e.target.value)} />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empMobileNo">Mobile No 1:</label>
-                                            <div className="col-sm-3">
-                                                <input type="text" className="form-control" id="empMobileNo" value={empMobileNo} onChange={(e) => setEmpMobileNo(e.target.value)} placeholder="Enter First Name here" />
-                                            </div>
-
-                                            <label className="control-label col-sm-2" htmlFor="empEmerMobileNo">Mobile No 2:</label>
-
-                                            <div className="col-sm-3">
-                                                <input type="text" className="form-control" id="empEmerMobileNo" value={empEmerMobileNo} onChange={(e) => setEmpEmerMobileNo(e.target.value)} placeholder="Enter Last Name here" />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="tempAddress">Temporary Address:</label>
-                                            <div className="col-sm-3">
-                                                <textarea row="6" className="form-control" id="tempAddress" value={tempAddress} onChange={(e) => setTempAddress(e.target.value)} placeholder="Enter First Name here" />
-                                            </div>
-
-                                            <label className="control-label col-sm-2" htmlFor="permAddress">Permenent Address:</label>
-
-                                            <div className="col-sm-3">
-                                                <textarea row="6" className="form-control" id="permAddress" value={permAddress} onChange={(e) => setPermAddress(e.target.value)} placeholder="Enter Last Name here" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="emailId"> Email Id:</label>
+                                        <div className="form-group">
+                                            <label className="control-label col-sm-4" htmlFor="desigId">Select Designation Name:</label>
                                             <div className="col-sm-4">
-
-                                                <input type="text" className="form-control" id="emailId" value={emailId} onChange={(e) => setEmailId(e.target.value)} placeholder="Enter Email Id here" />
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empGender">Gender:</label>
-                                            <div className="col-sm-3">
-                                                <select className="form-control" id="empGender" onChange={(e) => setEmpGender(e.target.value)} >
-                                                    <option value="Male">Male</option>
-                                                    <option value="Female">Female</option>
-                                                </select>
-                                            </div>
-
-                                            <label className="control-label col-sm-2" htmlFor="kppObjective" >Blood Group:</label>
-
-                                            <div className="col-sm-3">
-                                                <select className="form-control" id="empBloodgroup" onChange={(e) => setEmpBloodgroup(e.target.value)}>
-                                                    <option value="A+">A+ve</option>
-                                                    <option value="B+">B+ve</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="reamrk">Enter Remark:</label>
-                                            <div className="col-sm-8">
-                                                <textarea row="4" className="form-control" id="remark" value={remark} onChange={(e) => setRemark(e.target.value)} placeholder="Enter Remark here" />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div id="menu1" class="tab-pane fade">
-
-                                <div className="form-group">
-                                        <label className="control-label col-sm-4" htmlFor="deptId">Select Role Name:</label>
-                                        <div className="col-sm-4">
-                                            <div className="form-group">
-                                                <select className="form-control" id="reportingEmpIdRole" onChange={(e) => setReportingEmpIdRole(e.target.value)}>
-                                                    <option>--Select Role--</option>
-                                                    {
-                                                        roles.map(
-                                                            role =>
-                                                                <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
-                                                        )
-                                                    };
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label className="control-label col-sm-4" htmlFor="desigId">Select Designation Name:</label>
-                                        <div className="col-sm-4">
-                                            <div className="form-group">
-                                                <select className="form-control" id="desigId" onChange={(e) => setDesigId(e.target.value)}>
-                                                    <option>--Select Designation--</option>
-                                                    {
-                                                        designations.map(
+                                                <div className="form-group">
+                                                    <select className="form-control" id="desigId" onChange={(e) => setDesigId(e.target.value)}>
+                                                        <option>--Select Designation--</option>
+                                                        {designations.map(
                                                             designation =>
                                                                 <option key={designation.desigId} value={designation.desigId}>{designation.desigName}</option>
-                                                        )
-                                                    };
+                                                        )};
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <div className="row">
+                                                <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empFirstName">Employee Name:</label>
+                                                <div className="col-sm-3">
+                                                    <input type="text" className="form-control" id="empFirstName" value={empFirstName} onChange={(e) => setEmpFirstName(e.target.value)} placeholder="Enter First Name here" />
+                                                </div>
 
-                                                </select>
+                                                <div className="col-sm-3">
+                                                    <input type="text" className="form-control" id="empMiddleName" value={empMiddleName} onChange={(e) => setEmpMiddleName(e.target.value)} placeholder="Enter Middle Name here" />
+                                                </div>
+
+                                                <div className="col-sm-3">
+                                                    <input type="text" className="form-control" id="empLastName" value={empLastName} onChange={(e) => setEmpLastName(e.target.value)} placeholder="Enter Last Name here" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="form-group">
+                                            <div className="row">
+                                                <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empDob">Date Of Birth:</label>
+                                                <div className="col-sm-3">
+                                                    <input type="date" className="form-control" id="empDob" value={empDob} onChange={(e) => setEmpDob(e.target.value)} />
+
+                                                </div>
+
+                                                <label className="control-label col-sm-2" htmlFor="empPhoto">Upload Photo:</label>
+
+                                                <div className="col-sm-3">
+                                                    <input type="file" className="form-control" id="empPhoto" value={empPhoto} onChange={(e) => setEmpPhoto(e.target.value)} />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="form-group">
+                                            <div className="row">
+                                                <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empMobileNo">Mobile No 1:</label>
+                                                <div className="col-sm-3">
+                                                    <input type="text" className="form-control" id="empMobileNo" value={empMobileNo} onChange={(e) => setEmpMobileNo(e.target.value)} placeholder="Enter First Name here" />
+                                                </div>
+
+                                                <label className="control-label col-sm-2" htmlFor="empEmerMobileNo">Mobile No 2:</label>
+
+                                                <div className="col-sm-3">
+                                                    <input type="text" className="form-control" id="empEmerMobileNo" value={empEmerMobileNo} onChange={(e) => setEmpEmerMobileNo(e.target.value)} placeholder="Enter Last Name here" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="form-group">
+                                            <div className="row">
+                                                <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="tempAddress">Temporary Address:</label>
+                                                <div className="col-sm-3">
+                                                    <textarea row="6" className="form-control" id="tempAddress" value={tempAddress} onChange={(e) => setTempAddress(e.target.value)} placeholder="Enter First Name here" />
+                                                </div>
+
+                                                <label className="control-label col-sm-2" htmlFor="permAddress">Permenent Address:</label>
+
+                                                <div className="col-sm-3">
+                                                    <textarea row="6" className="form-control" id="permAddress" value={permAddress} onChange={(e) => setPermAddress(e.target.value)} placeholder="Enter Last Name here" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <div className="row">
+                                                <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="emailId"> Email Id:</label>
+                                                <div className="col-sm-4">
+
+                                                    <input type="text" className="form-control" id="emailId" value={emailId} onChange={(e) => setEmailId(e.target.value)} placeholder="Enter Email Id here" />
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="form-group">
+                                            <div className="row">
+                                                <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empGender">Gender:</label>
+                                                <div className="col-sm-3">
+                                                    <select className="form-control" id="empGender" onChange={(e) => setEmpGender(e.target.value)} >
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                    </select>
+                                                </div>
+
+                                                <label className="control-label col-sm-2" htmlFor="kppObjective" >Blood Group:</label>
+
+                                                <div className="col-sm-3">
+                                                    <select className="form-control" id="empBloodgroup" onChange={(e) => setEmpBloodgroup(e.target.value)}>
+                                                        <option value="A+">A+ve</option>
+                                                        <option value="B+">B+ve</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="form-group">
+                                            <div className="row">
+                                                <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="reamrk">Enter Remark:</label>
+                                                <div className="col-sm-8">
+                                                    <textarea row="4" className="form-control" id="remark" value={remark} onChange={(e) => setRemark(e.target.value)} placeholder="Enter Remark here" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div id="menu1" class="tab-pane fade">
+
+                                        <div className="form-group">
+                                            <label className="control-label col-sm-4" htmlFor="deptId">Select Role Name:</label>
+                                            <div className="col-sm-4">
+                                                <div className="form-group">
+                                                    <select className="form-control" id="reportingEmpIdRole" onChange={(e) => setReportingEmpIdRole(e.target.value)}>
+                                                        {
+                                                            roles.map(
+                                                                role =>
+                                                                    <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
+                                                            )
+                                                        };
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label className="control-label col-sm-4" htmlFor="desigId">Select Designation Name:</label>
+                                            <div className="col-sm-4">
+                                                <div className="form-group">
+                                                    <select className="form-control" id="desigId" onChange={(e) => setDesigId(e.target.value)}>
+                                                        {
+                                                            designations.map(
+                                                                designation =>
+                                                                    <option key={designation.desigId} value={designation.desigId}>{designation.desigName}</option>
+                                                            )
+                                                        };
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label className="control-label col-sm-4" htmlFor="deptId">Enter Reporting Employee Name:</label>
+                                            <div className="col-sm-4">
+                                                <div className="form-group">
+                                                    <select className="form-control" id="reportingEmpId" onChange={(e) => setReportingEmpId(e.target.value)}>
+                                                        <option>--Select Reporting Name--</option>
+                                                        {
+                                                            reportings.map(
+                                                                reporting =>
+                                                                    <option key={reporting.empId} value={reporting.empId}>{reporting.empFirstName + " " + reporting.empMiddleName + " " + reporting.empLastName}</option>
+                                                            )
+                                                        };
+
+                                                    </select>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="form-group">
-                                        <label className="control-label col-sm-4" htmlFor="deptId">Enter Reporting Employee Name:</label>
-                                        <div className="col-sm-4">
-                                            <div className="form-group">
-                                                <select className="form-control" id="reportingEmpId" onChange={(e) => setReportingEmpId(e.target.value)}>
-                                                    <option>--Select Reporting Name--</option>
-                                                    {
-                                                        reportings.map(
-                                                            reporting =>
-                                                                <option key={reporting.empId} value={reporting.empId}>{reporting.empFirstName + " " + reporting.empMiddleName + " " + reporting.empLastName}</option>
-                                                        )
-                                                    };
 
-                                                </select>
-
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
-                              
-                               
-                            </div>
-                           
+
 
                             </form>
                         </div>
@@ -514,7 +508,6 @@ export default function EmployeeComponent() {
             </div>
 
             {/* Update Employee Details */}
-
 
             <div className="modal fade" id="updateEmployee" role="dialog">
                 <div className="modal-dialog modal-lg">
@@ -563,14 +556,12 @@ export default function EmployeeComponent() {
                                         <label className="control-label col-sm-3" htmlFor="deptId">Department Name:</label>
                                         <div className="col-sm-3">
 
-                                            <select className="form-control" id="deptId" onChange={(e) => setDeptId(e.target.value)}>
+                                            <select className="form-control" id="deptId" value={deptId} onChange={(e) => setDeptId(e.target.value)}>
                                                 <option>--Select Department--</option>
-                                                {
-                                                    departments.map(
-                                                        department =>
-                                                            <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
-                                                    )
-                                                };
+                                                {departments.map(
+                                                    department =>
+                                                        <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
+                                                )};
                                             </select>
                                         </div>
                                     </div>
@@ -581,14 +572,12 @@ export default function EmployeeComponent() {
                                         <label className="control-label col-sm-3" htmlFor="desigId"> Designation Name:</label>
                                         <div className="col-sm-3">
 
-                                            <select className="form-control" id="desigId" onChange={(e) => setDesigId(e.target.value)}>
+                                            <select className="form-control" id="desigId" value={desigId} onChange={(e) => setDesigId(e.target.value)}>
                                                 <option>--Select Department--</option>
-                                                {
-                                                    departments.map(
-                                                        department =>
-                                                            <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
-                                                    )
-                                                };
+                                                {designations.map(
+                                                    designation =>
+                                                        <option key={designation.desigId} value={designation.desigId}>{designation.desigName}</option>
+                                                )};
                                             </select>
                                         </div>
                                     </div>
@@ -627,9 +616,11 @@ export default function EmployeeComponent() {
                                     <div className="row">
                                         <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="emailId"> Email Id:</label>
                                         <div className="col-sm-4">
-
-                                            <input type="text" className="form-control" id="emailId" value={emailId} onChange={(e) => setEmailId(e.target.value)} placeholder="Enter Email Id here" />
-
+                                            <input type="text"
+                                                className="form-control"
+                                                id="emailId" value={emailId}
+                                                onChange={(e) => setEmailId(e.target.value)}
+                                                placeholder="Enter Email Id here" />
                                         </div>
                                     </div>
                                 </div>
@@ -638,7 +629,7 @@ export default function EmployeeComponent() {
                                     <div className="row">
                                         <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empGender">Gender:</label>
                                         <div className="col-sm-3">
-                                            <select className="form-control" id="empGender" onChange={(e) => setEmpGender(e.target.value)} >
+                                            <select className="form-control" id="empGender" onChange={(e) => setEmpGender(e.target.value)} value={empGender} >
                                                 <option value={'Male'}>Male</option>
                                                 <option value={'Female'}>Female</option>
                                             </select>
@@ -786,9 +777,7 @@ export default function EmployeeComponent() {
                                         <div className="col-sm-3">
                                             {empGender}
                                         </div>
-
                                         <label className="control-label col-sm-2" htmlFor="kppObjective" >Blood Group:</label>
-
                                         <div className="col-sm-3">
                                             {empBloodgroup}
                                         </div>

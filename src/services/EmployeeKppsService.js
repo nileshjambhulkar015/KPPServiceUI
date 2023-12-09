@@ -9,6 +9,7 @@ class EmployeeKppsService {
     getKPPDetails() {
         if (null != Cookies.get('empId')) {
             return axios.get(BASE_URL)
+           
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
@@ -18,6 +19,7 @@ class EmployeeKppsService {
     saveEmployeeKppDetails(todos){
         if (null != Cookies.get('empId')) {
             return axios.put("http://localhost:9091/employee-key-perform-parameter",todos)
+            
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
