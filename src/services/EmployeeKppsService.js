@@ -14,6 +14,15 @@ class EmployeeKppsService {
             window.location.replace("http://localhost:3008/");
         }
     }
+
+    saveEmployeeKppDetails(todos){
+        if (null != Cookies.get('empId')) {
+            return axios.put("http://localhost:9091/employee-key-perform-parameter",todos)
+        } else {
+            alert("You need to login first")
+            window.location.replace("http://localhost:3008/");
+        }  
+    }
 }
 
 
