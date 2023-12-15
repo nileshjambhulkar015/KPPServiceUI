@@ -62,9 +62,9 @@ class EmployeeService {
         }           
     }
 
-    getEmployeeSuggest(roleId) {
+    getEmployeeSuggest(reportingEmpDesigId) {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/employee/suggest?roleId=" + roleId);
+            return axios.get("http://localhost:9091/employee/reportToEmpName?desigId=" + reportingEmpDesigId);
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");

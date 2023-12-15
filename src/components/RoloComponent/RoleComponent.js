@@ -12,14 +12,12 @@ export default function RoleComponent() {
     useEffect(() => {
         RoleService.getRolesDetailsByPaging().then((res) => {
             setRoles(res.data.responseData.content);
-            console.log(res.data)
         });
     }, []);
 
     const searchRoleName = (e) => {
         RoleService.getRolesDetailsByRoleNamePaging(e).then((res) => {
             setRoles(res.data.responseData.content);
-            console.log(res.data)
         });
     }
     
@@ -36,7 +34,6 @@ export default function RoleComponent() {
                 setRoleName('');
                 setRemark('');
             });
-            console.log("Role added");
         }
         );
         // window.location.reload(); 
@@ -51,7 +48,6 @@ export default function RoleComponent() {
             setRemark(role.remark)
         }
         );
-        // window.location.reload(); 
     }
 
 
@@ -69,7 +65,6 @@ export default function RoleComponent() {
                     setRoles(res.data.responseData.content);
                     console.log(res.data.responseData.content)
                 });
-                console.log("Role deleted");
             }
             );
         }
@@ -85,7 +80,6 @@ export default function RoleComponent() {
         RoleService.updateRoleDetails(role).then(res => {
             RoleService.getRolesDetailsByPaging().then((res) => {
                 setRoles(res.data.responseData.content);
-                console.log(res.data)
             });
             console.log("Roles update");
         }
@@ -119,9 +113,9 @@ export default function RoleComponent() {
                         <table className="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Sr No</th>
-                                    <th>Role Name</th>
-                                    <th>Action</th>
+                                    <th className="text-center">Sr No</th>
+                                    <th className="text-center">Role Name</th>
+                                    <th className="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -129,7 +123,7 @@ export default function RoleComponent() {
                                     roles.map(
                                         (role, index) =>   //index is inbuilt variable of map started with 0
                                             <tr key={role.roleId}>
-                                                <td>{index + 1}</td>
+                                                <td className="text-center">{index + 1}</td>
                                                 <td>{role.roleName}</td>
                                                 <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateRole" onClick={() => showRoleById(role.roleId)}>Update</button>
                                                     <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteRoleById(role.roleId)}>Delete</button>

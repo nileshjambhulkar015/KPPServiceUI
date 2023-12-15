@@ -13,7 +13,9 @@ export default function EmployeeComponent() {
     const [deptName, setDeptName] = useState('');
     const [desigId, setDesigId] = useState('');
     const [desigName, setDesigName] = useState('');
-    const [reportingEmpIdRole, setReportingEmpIdRole] = useState('');
+    const [reportingEmpRoleId, setReportingEmpRoleId] = useState('');
+    const [reportingEmpDeptId, setReportingEmpDeptId] = useState('');
+    const [reportingEmpDesigId, setReportingEmpDesigId] = useState('');
     const [reportingEmpId, setReportingEmpId] = useState('');
     const [regionId, setRegionId] = useState('');
     const [regionName, setRegionName] = useState('');
@@ -36,9 +38,12 @@ export default function EmployeeComponent() {
 
     const [employees, setEmployees] = useState([])
     const [roles, setRoles] = useState([])
+    const [reportingRoles, setReportingRoles] = useState([])
     const [departments, setDepartments] = useState([])
+    const [reportingDepartments, setReportingDepartments] = useState([])
     const [designations, setDesignations] = useState([])
-    const [reportings, setReportings] = useState([])
+    const [reportingDesignations, setReportingDesignations] = useState([])
+    const [reportingEmpName, setReportingEmpName] = useState([])
 
     const [empFirstNameSearch, setEmpFirstNameSearch] = useState('');
 
@@ -69,6 +74,12 @@ export default function EmployeeComponent() {
             setRoles(res.data);
         });
 
+        //reprting to employee role
+        RoleService.getRolesInDesignation().then((res) => {
+
+            setReportingRoles(res.data);
+        });
+
     }, []);
 
     const searchEmployeeFirstName = (e) => {
@@ -85,6 +96,13 @@ export default function EmployeeComponent() {
         });
     }, [roleId]);
 
+     //for all department by role id for reporting to tab
+     useEffect((e) => {
+        reportingEmpRoleId && DepartmentService.getDepartmentByRoleIdFromDesign(reportingEmpRoleId).then((res) => {
+            setReportingDepartments(res.data);
+        });
+    }, [reportingEmpRoleId]);
+
     //for all designation  by dept id
     useEffect((e) => {
         deptId && DesignationService.getDesignationDetailsForKpp(deptId).then((res) => {
@@ -92,14 +110,22 @@ export default function EmployeeComponent() {
         });
     }, [deptId]);
 
+        //for all designation  by dept id for reporting to tab
+        useEffect((e) => {
+            reportingEmpDeptId && DesignationService.getDesignationDetailsForKpp(reportingEmpDeptId).then((res) => {
+                setReportingDesignations(res.data);
+            });
+        }, [reportingEmpDeptId]);
+
     //for all reportingEmpId  by desig id
     useEffect((e) => {
-        console.log("inside for employee")
-        reportingEmpIdRole && EmployeeService.getEmployeeSuggest(reportingEmpIdRole).then((res) => {
+        console.log("inside for employee : ", e)
+        console.log("inside for employee reportingEmpDesigId : ", reportingEmpDesigId)
+        reportingEmpDesigId && EmployeeService.getEmployeeSuggest(reportingEmpDesigId).then((res) => {
             console.log(res.data)
-            setReportings(res.data);
+            setReportingEmpName(res.data);
         });
-    }, [reportingEmpIdRole]);
+    }, [reportingEmpDesigId]);
 
     const showEmployeeById = (e) => {
 
@@ -273,12 +299,12 @@ export default function EmployeeComponent() {
                         <div className="modal-body">
                         <form className="form-horizontal">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#home">Employee Information</a></li>
-                                <li><a data-toggle="tab" href="#menu1">Reports To</a></li>                               
+                                <li class="active"><a data-toggle="tab" href="#employeeInfo">Employee Information</a></li>
+                                <li><a data-toggle="tab" href="#reportsTo">Reports To</a></li>                               
                             </ul>
 
                             <div class="tab-content">
-                                <div id="home" class="tab-pane fade in active">
+                                <div id="employeeInfo" class="tab-pane fade in active">
 
                                     <div className="form-group">
                                         <label className="control-label col-sm-4" htmlFor="deptId">Select Role Name:</label>
@@ -438,20 +464,38 @@ export default function EmployeeComponent() {
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
-                                <div id="menu1" class="tab-pane fade">
 
+                                <div id="reportsTo" class="tab-pane fade">
                                 <div className="form-group">
                                         <label className="control-label col-sm-4" htmlFor="deptId">Select Role Name:</label>
                                         <div className="col-sm-4">
                                             <div className="form-group">
-                                                <select className="form-control" id="reportingEmpIdRole" onChange={(e) => setReportingEmpIdRole(e.target.value)}>
+                                                <select className="form-control" id="reportingEmpRoleId" onChange={(e) => setReportingEmpRoleId(e.target.value)}>
                                                     <option>--Select Role--</option>
                                                     {
-                                                        roles.map(
+                                                        reportingRoles.map(
                                                             role =>
                                                                 <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
+                                                        )
+                                                    };
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+
+                                    <div className="form-group">
+                                        <label className="control-label col-sm-4" htmlFor="deptId">Select Department Name:</label>
+                                        <div className="col-sm-4">
+                                            <div className="form-group">
+                                                <select className="form-control" id="reportingEmpDeptId" onChange={(e) => setReportingEmpDeptId(e.target.value)}>
+                                                    <option>--Select Department--</option>
+                                                    {
+                                                        reportingDepartments.map(
+                                                            department =>
+                                                                <option key={department.deptId} value={department.deptId}>{department.deptName}</option>
                                                         )
                                                     };
 
@@ -464,10 +508,10 @@ export default function EmployeeComponent() {
                                         <label className="control-label col-sm-4" htmlFor="desigId">Select Designation Name:</label>
                                         <div className="col-sm-4">
                                             <div className="form-group">
-                                                <select className="form-control" id="desigId" onChange={(e) => setDesigId(e.target.value)}>
+                                                <select className="form-control" id="reportingEmpDesigId" onChange={(e) => setReportingEmpDesigId(e.target.value)}>
                                                     <option>--Select Designation--</option>
                                                     {
-                                                        designations.map(
+                                                        reportingDesignations.map(
                                                             designation =>
                                                                 <option key={designation.desigId} value={designation.desigId}>{designation.desigName}</option>
                                                         )
@@ -476,7 +520,7 @@ export default function EmployeeComponent() {
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>                                  
 
                                     <div className="form-group">
                                         <label className="control-label col-sm-4" htmlFor="deptId">Enter Reporting Employee Name:</label>
@@ -485,7 +529,7 @@ export default function EmployeeComponent() {
                                                 <select className="form-control" id="reportingEmpId" onChange={(e) => setReportingEmpId(e.target.value)}>
                                                     <option>--Select Reporting Name--</option>
                                                     {
-                                                        reportings.map(
+                                                        reportingEmpName.map(
                                                             reporting =>
                                                                 <option key={reporting.empId} value={reporting.empId}>{reporting.empFirstName + " " + reporting.empMiddleName + " " + reporting.empLastName}</option>
                                                         )

@@ -39,11 +39,11 @@ export default function DepartmentComponent() {
 
         DepartmentService.saveDpartmentDetails(department).then(res => {
             console.log("res=", res.data)
-            DepartmentService.getDpartmentDetailsByPaging().then((res) => {              
-                    setDepartments(res.data.responseData.content);                  
-                    setDeptName('');
-                    setRemark('');
-              
+            DepartmentService.getDpartmentDetailsByPaging().then((res) => {
+                setDepartments(res.data.responseData.content);
+                setDeptName('');
+                setRemark('');
+
             });
             console.log("Department added");
         }
@@ -113,11 +113,11 @@ export default function DepartmentComponent() {
                 <div className="col-md-8">
                     <div className="row">
                         <div className="col-sm-8">
-                        <div className="form-group">
+                            <div className="form-group">
                                 <form className="form-horizontal">
                                     <label className="control-label col-sm-4" htmlFor="deptNameSearch">Enter Department Name:</label>
                                     <div className="col-sm-4">
-                                        <input type="text" className="form-control" id="deptNameSearch" placeholder="Enter Department Name"  value={deptNameSearch} onChange={(e) => setDeptNameSearch(e.target.value)}/>
+                                        <input type="text" className="form-control" id="deptNameSearch" placeholder="Enter Department Name" value={deptNameSearch} onChange={(e) => setDeptNameSearch(e.target.value)} />
                                     </div>
                                 </form>
                                 <button type="submit" className="btn btn-primary" onClick={() => searchDeptName(deptNameSearch)}>Search</button>
@@ -130,11 +130,10 @@ export default function DepartmentComponent() {
                         <table className="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Sr No</th>
-                                    <th>Department Name</th>
-                                    <th>Role Name</th>
-                              
-                                    <th>Action</th>
+                                    <th className="text-center">Sr No</th>
+                                    <th className="text-center">Department Name</th>
+                                    <th className="text-center">Role Name</th>
+                                    <th className="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -142,10 +141,10 @@ export default function DepartmentComponent() {
                                     departments.map(
                                         (department, index) =>   //index is inbuilt variable of map started with 0
                                             <tr key={department.deptId}>
-                                                <td>{index + 1}</td>
+                                                <td className="text-center">{index + 1}</td>
                                                 <td>{department.deptName}</td>
                                                 <td>{department.roleName}</td>
-                                           
+
                                                 <td> <button type="submit" className="btn btn-info" data-toggle="modal" data-target="#updateDepartment" onClick={() => showDepartmentById(department.deptId)}>Update</button>
                                                     <button type="submit" className="btn col-sm-offset-1 btn-danger" onClick={() => deleteDepartmentById(department.deptId)}>Delete</button>
                                                     <button type="submit" className="btn col-sm-offset-1 btn-success" data-toggle="modal" data-target="#showData" onClick={() => showDepartmentById(department.deptId)}>View</button></td>
@@ -170,23 +169,23 @@ export default function DepartmentComponent() {
                             <h4 className="modal-title">Add Department</h4>
                         </div>
                         <div className="modal-body">
-                        <form className="form-horizontal">
-                        <div className="form-group">
-                                <label className="control-label col-sm-4" htmlFor="deptName">Select Role Name:</label>
-                                <div className="col-sm-8">
-                                <select className="form-control" id="roleId" onChange={(e) => setRoleId(e.target.value)}>
-                                        <option>--Select Role--</option>
-                                                    {
-                                                        roles.map(
-                                                            role =>
-                                                                <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
-                                                        )
-                                                    };
+                            <form className="form-horizontal">
+                                <div className="form-group">
+                                    <label className="control-label col-sm-4" htmlFor="deptName">Select Role Name:</label>
+                                    <div className="col-sm-8">
+                                        <select className="form-control" id="roleId" onChange={(e) => setRoleId(e.target.value)}>
+                                            <option>--Select Role--</option>
+                                            {
+                                                roles.map(
+                                                    role =>
+                                                        <option key={role.roleId} value={role.roleId}>{role.roleName}</option>
+                                                )
+                                            };
 
                                         </select>
+                                    </div>
                                 </div>
-                            </div>
-                            
+
                                 <div> <input type="hidden" id="deptId" name="deptId" value={deptId} /></div>
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="deptName">Enter Department Name:</label>
@@ -259,7 +258,7 @@ export default function DepartmentComponent() {
                         </div>
                         <div className="modal-body">
                             <form className="form-horizontal">
-                            <div> <input type="hidden" id="roleId" name="roleId" value={roleId} /></div>
+                                <div> <input type="hidden" id="roleId" name="roleId" value={roleId} /></div>
                                 <div className="form-group">
                                     <label className="control-label col-sm-4" htmlFor="roleName" >Role Name:</label>
                                     <div className="col-sm-8">
