@@ -61,7 +61,9 @@ export default function EmployeeComponent() {
             });
             console.log("Employee added");
         }
-        );
+        ).catch((err) => {
+            alert(err.response.data.details)
+         });
         // window.location.reload(); 
     }
 
