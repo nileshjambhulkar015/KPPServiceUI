@@ -3,6 +3,7 @@ import EmployeeService from "../../services/EmployeeService";
 import RoleService from "../../services/RoleService";
 import DepartmentService from "../../services/DepartmentService";
 import DesignationService from "../../services/DesignationService";
+import Cookies from 'js-cookie';
 export default function EmployeeComponent() {
 
     const [empId, setEmpId] = useState('');
@@ -34,7 +35,7 @@ export default function EmployeeComponent() {
     const [empGender, setEmpGender] = useState('Male');
     const [empBloodgroup, setEmpBloodgroup] = useState('A+');
     const [remark, setRemark] = useState('');
-    const [employeeId, setEmployeeId] = useState('');
+   
 
     const [employees, setEmployees] = useState([])
     const [roles, setRoles] = useState([])
@@ -62,7 +63,10 @@ export default function EmployeeComponent() {
         let statusCd = 'A';
         let regionId = '1';
         let siteId = '1';
-        let employee = { empEId,roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
+
+        let createdUserId = Cookies.get('empEId');
+        console.log("login user id : ",createdUserId)
+        let employee = { empEId,roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd,createdUserId };
         console.log(employee)
 
         EmployeeService.saveEmployeeDetails(employee).then(res => {
@@ -78,6 +82,7 @@ export default function EmployeeComponent() {
     }
 
     useEffect(() => {
+        console.log("logs ", Cookies.get('empEId'))
         EmployeeService.getEmployeeDetailsByPaging().then((res) => {
             setEmployees(res.data.responseData.content);
         });
@@ -410,13 +415,13 @@ export default function EmployeeComponent() {
                                         <div className="row">
                                             <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="empMobileNo">Mobile No 1:</label>
                                             <div className="col-sm-3">
-                                                <input type="text" className="form-control" id="empMobileNo" value={empMobileNo} onChange={(e) => setEmpMobileNo(e.target.value)} placeholder="Enter First Name here" />
+                                                <input type="number" min="0" className="form-control" id="empMobileNo" value={empMobileNo} onChange={(e) => setEmpMobileNo(e.target.value)} placeholder="Enter First Name here" />
                                             </div>
 
                                             <label className="control-label col-sm-2" htmlFor="empEmerMobileNo">Mobile No 2:</label>
 
                                             <div className="col-sm-3">
-                                                <input type="text" className="form-control" id="empEmerMobileNo" value={empEmerMobileNo} onChange={(e) => setEmpEmerMobileNo(e.target.value)} placeholder="Enter Last Name here" />
+                                                <input type="number" min="0" className="form-control" id="empEmerMobileNo" value={empEmerMobileNo} onChange={(e) => setEmpEmerMobileNo(e.target.value)} placeholder="Enter Last Name here" />
                                             </div>
                                         </div>
                                     </div>
@@ -440,7 +445,7 @@ export default function EmployeeComponent() {
                                             <label className="control-label col-sm-2 col-sm-offset-1" htmlFor="emailId"> Email Id:</label>
                                             <div className="col-sm-4">
 
-                                                <input type="text" className="form-control" id="emailId" value={emailId} onChange={(e) => setEmailId(e.target.value)} placeholder="Enter Email Id here" />
+                                                <input type="email" className="form-control" id="emailId" value={emailId} onChange={(e) => setEmailId(e.target.value)} placeholder="Enter Email Id here" />
 
                                             </div>
                                         </div>
