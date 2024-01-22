@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import RoleService from "../../services/RoleService";
 import DepartmentService from "../../services/DepartmentService";
+import axios from 'axios'
 export default function DesignationComponent() {
     const [roleId, setRoleId] = useState('');
     const [roleName, setRoleName] = useState('');
@@ -19,6 +20,11 @@ export default function DesignationComponent() {
     const [departments, setDepartments] = useState([])
     const [roles, setRoles] = useState([])
 
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const handleFileChange = (event) => {
+      setSelectedFile(event.target.files[0]);
+    }
     useEffect(() => {
         DesignationService.getDesignationDetailsByPaging().then((res) => {
             setDesignations(res.data.responseData.content);
@@ -94,6 +100,25 @@ export default function DesignationComponent() {
 
     }
 
+    const handleUpload = async () => {
+        try {
+          const formData = new FormData();
+          formData.append('file', selectedFile);
+      
+          await axios.post('http://localhost:9091/designation/upload-designation', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+      
+          alert('File uploaded successfully!');
+        } catch (error) {
+          console.error('Error uploading file:', error.message);
+          alert('Failed to upload file.');
+        }
+      };
+    
+
     const deleteDesignationById = (e) => {
        
 
@@ -119,6 +144,7 @@ export default function DesignationComponent() {
             );
         }
         );
+
         // window.location.reload(); 
     }
     return (
@@ -140,7 +166,12 @@ export default function DesignationComponent() {
                                 <button type="submit" className="btn btn-primary" onClick={() => searchDesigName(desigNameSearch)}>Search</button>
                             </div>
                     </div>
-                    <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveDesignation">Add Designation</button></div>
+                    <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveDesignation">Add Designation</button>
+                    <input type="file" onChange={handleFileChange} />
+                         <button onClick={handleUpload} disabled={!selectedFile}>
+                             Import Designations
+                        </button>
+                    </div>
                 </div>
                 <div className="row">
 

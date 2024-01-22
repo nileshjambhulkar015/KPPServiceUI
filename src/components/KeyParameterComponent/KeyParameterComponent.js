@@ -3,7 +3,7 @@ import DepartmentService from "../../services/DepartmentService";
 import KeyParameterService from "../../services/KeyParameterService";
 import DesignationService from "../../services/DesignationService";
 import RoleService from "../../services/RoleService";
-
+import axios from 'axios';
 export default function KeyParameterComponent() {
     const [kppId, setKppId] = useState('');
     const [roleId, setRoleId] = useState('');
@@ -33,7 +33,11 @@ export default function KeyParameterComponent() {
     const [roles, setRoles] = useState([])
 
     const [kppObjectiveSearch, setKppObjectiveSearch] = useState('');
-   
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const handleFileChange = (event) => {
+      setSelectedFile(event.target.files[0]);
+    }
     const searchKppObjective = (e) => {
         KeyParameterService.getKPPDetailsByKppObjectivePaging(e).then((res) => {
             setKpps(res.data.responseData.content);
@@ -111,6 +115,23 @@ export default function KeyParameterComponent() {
         // window.location.reload(); 
     }
 
+    const handleUpload = async () => {
+        try {
+          const formData = new FormData();
+          formData.append('file', selectedFile);
+      
+          await axios.post('http://localhost:9091/key-perform-parameter/upload-kpp', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+      
+          alert('File uploaded successfully!');
+        } catch (error) {
+          console.error('Error uploading file:', error.message);
+          alert('Failed to upload file.');
+        }
+      };
     const deleteKppById = (e) => {
         KeyParameterService.getKppById(e).then(res => {
             let kpp = res.data;
@@ -181,7 +202,13 @@ export default function KeyParameterComponent() {
                                 <button type="submit" className="btn btn-primary" onClick={() => searchKppObjective(kppObjectiveSearch)}>Search</button>
                             </div>
                 </div>
-                <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveKpp">Add Key Parameter</button></div>
+                <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveKpp">Add Key Parameter</button>
+                <input type="file" onChange={handleFileChange} />
+                         <button onClick={handleUpload} disabled={!selectedFile}>
+                             Import Key Parameters
+                        </button>
+                    
+                </div>
             </div>
             <div className="row">
                 <table className="table table-bordered">
