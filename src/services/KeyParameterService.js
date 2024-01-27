@@ -1,6 +1,7 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
 
+
 const DEPARTMENT_URL = "http://localhost:9091/designation/department";
 const BASE_URL = "http://localhost:9091/key-perform-parameter";
 
@@ -34,9 +35,9 @@ class KeyParameterService {
         }
     }
 
-    getKPPDetailsByPaging() {
+    getKPPDetailsByPaging(currentPage, size) {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/key-perform-parameter/search?statusCd=A&page=0&size=20&sort=dept.dept_name");
+            return axios.get(`http://localhost:9091/key-perform-parameter/search?statusCd=A&page=${currentPage.currentPage}&size=${currentPage.size}&sort=dept.dept_name`);
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");

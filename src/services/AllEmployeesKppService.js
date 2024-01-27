@@ -5,9 +5,10 @@ const BASE_URL = `http://localhost:9091/employee/employee-kpp-status?reportingEm
 
 class AllEmployeesKppService {
 
-    getEmployeeDetailsByPagination() {
+    getEmployeeDetailsByPagination(currentPage, size) {
         if (null != Cookies.get('empId')) {
-            return axios.get(BASE_URL)
+            return axios.get(`http://localhost:9091/employee/employee-kpp-status?reportingEmployee=${Cookies.get('empId')}&page=${currentPage.currentPage}&size=${currentPage.size}&sort=desig.desig_name`);
+           
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008");

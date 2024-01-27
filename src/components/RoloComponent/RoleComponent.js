@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import RoleService from "../../services/RoleService";
-
+import Pagination from "../Pagination/Pagination";
 export default function RoleComponent() {
     const [roleId, setRoleId] = useState('');
     const [roleName, setRoleName] = useState('');
@@ -8,12 +8,16 @@ export default function RoleComponent() {
 
     const [roleNameSearch, setRoleNameSearch] = useState('');
     const [roles, setRoles] = useState([])
-
+    const [currentPage, setCurrentPage] = useState(0);
+    const [size, setSize] = useState(8);
+    const [totalPages, setTotalPages] = useState(10);
+    
     useEffect(() => {
-        RoleService.getRolesDetailsByPaging().then((res) => {
+        RoleService.getRolesDetailsByPaging({ currentPage, size }).then((res) => {
             setRoles(res.data.responseData.content);
+            setTotalPages(res.data.responseData.totalPages);
         });
-    }, []);
+    }, [size, currentPage]);
 
     const searchRoleName = (e) => {
         RoleService.getRolesDetailsByRoleNamePaging(e).then((res) => {
@@ -29,7 +33,7 @@ export default function RoleComponent() {
 
         RoleService.saveRolesDetails(role).then(res => {
             console.log("res=", res.data)
-            RoleService.getRolesDetailsByPaging().then((res) => {
+            RoleService.getRolesDetailsByPaging({ currentPage, size }).then((res) => {
                 setRoles(res.data.responseData.content);
                 setRoleName('');
                 setRemark('');
@@ -61,7 +65,7 @@ export default function RoleComponent() {
             let updateRole = { roleId, roleName, remark, statusCd };
 
             RoleService.updateRoleDetails(updateRole).then(res => {
-                RoleService.getRolesDetailsByPaging().then((res) => {
+                RoleService.getRolesDetailsByPaging({ currentPage, size }).then((res) => {
                     setRoles(res.data.responseData.content);
                     console.log(res.data.responseData.content)
                 });
@@ -78,7 +82,7 @@ export default function RoleComponent() {
         let role = { roleId, roleName, remark, statusCd };
 
         RoleService.updateRoleDetails(role).then(res => {
-            RoleService.getRolesDetailsByPaging().then((res) => {
+            RoleService.getRolesDetailsByPaging({ currentPage, size }).then((res) => {
                 setRoles(res.data.responseData.content);
             });
             console.log("Roles update");
@@ -134,7 +138,7 @@ export default function RoleComponent() {
                             </tbody>
                         </table>
                     </div>
-
+                    <Pagination setCurrentPage={setCurrentPage} currentPage={currentPage} setSize={setSize} totalPages={totalPages} />
                 </div>
                 <div className="col-md-2"></div>
 

@@ -45,10 +45,15 @@ class DepartmentService {
 
     }
 
+//here implemented pagination
+    getDpartmentDetailsByPaging(currentPage, size) {
 
-    getDpartmentDetailsByPaging() {
+        console.log("getDpartmentDetailsByPaging",currentPage, size)
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/department/search?statusCd=A&page=0&size=20&sort=role.role_name asc")
+            return axios.get(`http://localhost:9091/department/search?statusCd=A&page=${currentPage.currentPage}&size=${currentPage.size}&sort=role.role_name asc`)
+
+
+         
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
@@ -57,7 +62,7 @@ class DepartmentService {
 
     getDpartmentDetailsByDeptNamePaging(deptName) {
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/department/search?deptName=${deptName}&statusCd=A&page=0&size=20&sort=dept.dept_name`)
+            return axios.get(`http://localhost:9091/department/search?deptName=${deptName}&statusCd=A&page=0&size=200&sort=dept.dept_name`)
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");

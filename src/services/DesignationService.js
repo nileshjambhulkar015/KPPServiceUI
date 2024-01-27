@@ -27,9 +27,9 @@ class DesignationService {
 
 
 
-    getDesignationDetailsByPaging() {
+    getDesignationDetailsByPaging(currentPage, size) {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/designation/search?statusCd=A&page=0&size=20&sort=role.role_id")
+            return axios.get(`http://localhost:9091/designation/search?statusCd=A&page=${currentPage.currentPage}&size=${currentPage.size}&sort=role.role_id`)
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");
@@ -39,7 +39,7 @@ class DesignationService {
 
     getDesignationDetailsByDesigNamePaging(desigName) {
         if (null != Cookies.get('empId')) {
-            return axios.get(`http://localhost:9091/designation/search?desigName=${desigName}&statusCd=A&page=0&size=20&sort=desig.desigName`)
+            return axios.get(`http://localhost:9091/designation/search?desigName=${desigName}&statusCd=A&page=0&size=200&sort=desig.desigName`)
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");

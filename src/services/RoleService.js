@@ -41,9 +41,9 @@ class RoleService{
         }         
     }
     
-    getRolesDetailsByPaging(){
+    getRolesDetailsByPaging(currentPage, size){
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/roles/search?searchEnum=BY_STATUS&statusCdEnum=A&page=0&size=20&sort=roleName")
+            return axios.get(`http://localhost:9091/roles/search?searchEnum=BY_STATUS&statusCdEnum=A&page=${currentPage.currentPage}&size=${currentPage.size}&sort=roleName`)
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");

@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { useNavigate, useParams } from 'react-router-dom';
 import AllEmployeesKppService from '../../services/AllEmployeesKppService';
-
+import Pagination from "../Pagination/Pagination";
 
 export default function AllEmployeesKppComponent() {
 
@@ -13,14 +13,17 @@ export default function AllEmployeesKppComponent() {
 
     const [empKppStatus, setEmpKppStatus] = useState('Pending')
     const [empResponses, setEmpResponses] = useState([])
-
+    const [currentPage, setCurrentPage] = useState(0);
+    const [size, setSize] = useState(8);
+    const [totalPages, setTotalPages] = useState(10);
+    
 
     useEffect(() => {
-        AllEmployeesKppService.getEmployeeDetailsByPagination().then((res) => {
+        AllEmployeesKppService.getEmployeeDetailsByPagination({ currentPage, size }).then((res) => {
             setEmpResponses(res.data.responseData.content);
-
+            setTotalPages(res.data.responseData.totalPages);
         });
-    }, []);
+    }, [size, currentPage]);
 
     const onOptionChangeHandler = (event) => {
         console.log("event=", event)
@@ -93,6 +96,8 @@ export default function AllEmployeesKppComponent() {
                 </form>
 
             </div>
+            <Pagination setCurrentPage={setCurrentPage} currentPage={currentPage} setSize={setSize} totalPages={totalPages} />
+
             <div className="row">
                 <div className="col-sm-10"></div>
                 <div className="col-sm-2">

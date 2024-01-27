@@ -24,9 +24,9 @@ class EmployeeService {
         }     
     }
 
-    getEmployeeDetailsByPaging() {
+    getEmployeeDetailsByPaging(currentPage, size ) {
         if (null != Cookies.get('empId')) {
-            return axios.get("http://localhost:9091/employee/search?statusCd=A&page=0&size=20&sort=emp.emp_fname");
+            return axios.get(`http://localhost:9091/employee/search?statusCd=A&page=${currentPage.currentPage}&size=${currentPage.size}&sort=emp.emp_fname`);
         } else {
             alert("You need to login first")
             window.location.replace("http://localhost:3008/");

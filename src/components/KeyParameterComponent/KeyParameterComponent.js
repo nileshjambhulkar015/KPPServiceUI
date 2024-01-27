@@ -4,6 +4,7 @@ import KeyParameterService from "../../services/KeyParameterService";
 import DesignationService from "../../services/DesignationService";
 import RoleService from "../../services/RoleService";
 import axios from 'axios';
+import Pagination from "../Pagination/Pagination";
 export default function KeyParameterComponent() {
     const [kppId, setKppId] = useState('');
     const [roleId, setRoleId] = useState('');
@@ -34,6 +35,10 @@ export default function KeyParameterComponent() {
 
     const [kppObjectiveSearch, setKppObjectiveSearch] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const [size, setSize] = useState(8);
+    const [totalPages, setTotalPages] = useState(10);
 
     const handleFileChange = (event) => {
       setSelectedFile(event.target.files[0]);
@@ -75,14 +80,15 @@ export default function KeyParameterComponent() {
     }
 
     useEffect(() => {
-        KeyParameterService.getKPPDetailsByPaging().then((res) => {
+        KeyParameterService.getKPPDetailsByPaging({ currentPage, size }).then((res) => {
             setKpps(res.data.responseData.content);
+            setTotalPages(res.data.responseData.totalPages);
         });
 
         RoleService.getRolesInDesignation().then((res) => {
             setRoles(res.data);
         });
-    }, []);
+    }, [size, currentPage]);
 
      //for all department by role id
      useEffect((e)=>{
@@ -106,7 +112,7 @@ export default function KeyParameterComponent() {
         console.log(kpp)
 
         KeyParameterService.saveKPPDetails(kpp).then(res => {
-            KeyParameterService.getKPPDetailsByPaging().then((res) => {
+            KeyParameterService.getKPPDetailsByPaging({ currentPage, size }).then((res) => {
                 setKpps(res.data.responseData.content);
             });
             console.log("Kpp added");
@@ -159,7 +165,7 @@ export default function KeyParameterComponent() {
             let updateKpp = {roleId, kppId,deptId,desigId ,kppObjective,kppPerformanceIndi,kppOverallTarget,kppTargetPeriod,kppUoM,kppOverallWeightage,kppRating1,kppRating2,kppRating3,kppRating4,kppRating5, remark, statusCd };
 
             KeyParameterService.updateKppDetails(updateKpp).then(res => {
-                KeyParameterService.getKPPDetailsByPaging().then((res) => {
+                KeyParameterService.getKPPDetailsByPaging({ currentPage, size }).then((res) => {
                     setKpps(res.data.responseData.content);
                 });
                 console.log("Kpp deleted");
@@ -176,7 +182,7 @@ export default function KeyParameterComponent() {
         let updateKpp = {kppId,roleId, deptId,desigId ,kppObjective,kppPerformanceIndi,kppOverallTarget,kppTargetPeriod,kppUoM,kppOverallWeightage,kppRating1,kppRating2,kppRating3,kppRating4,kppRating5, remark, statusCd };
         
         KeyParameterService.updateKppDetails(updateKpp).then(res => {
-            KeyParameterService.getKPPDetailsByPaging().then((res) => {
+            KeyParameterService.getKPPDetailsByPaging({ currentPage, size }).then((res) => {
                 setKpps(res.data.responseData.content);
             });
             console.log("Department added");
@@ -246,6 +252,7 @@ export default function KeyParameterComponent() {
                     </tbody>
                 </table>
             </div>
+            <Pagination setCurrentPage={setCurrentPage} currentPage={currentPage} setSize={setSize} totalPages={totalPages} />
 
         </div>
         <div className="col-md-2"></div>

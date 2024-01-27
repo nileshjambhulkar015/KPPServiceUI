@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import DepartmentService from "../../services/DepartmentService";
 import RoleService from "../../services/RoleService";
 import axios from 'axios';
+import Pagination from "../Pagination/Pagination";
+
 
 
 export default function DepartmentComponent() {
@@ -17,20 +19,36 @@ export default function DepartmentComponent() {
     const [roles, setRoles] = useState([])
     const [selectedFile, setSelectedFile] = useState(null);
 
-    const handleFileChange = (event) => {
-      setSelectedFile(event.target.files[0]);
-    }
-
+    const [currentPage, setCurrentPage] = useState(0);
+    const [size, setSize] = useState(8);
+    const [totalPages, setTotalPages] = useState(10);
     useEffect(() => {
-        DepartmentService.getDpartmentDetailsByPaging().then((res) => {
+        console.log(currentPage ,size);
+        DepartmentService.getDpartmentDetailsByPaging({ currentPage, size }).then((res) => {
             setDepartments(res.data.responseData.content);
-            console.log(res.data)
+            setTotalPages(res.data.responseData.totalPages);
+
         });
 
         RoleService.getRoles().then((res) => {
             setRoles(res.data);
         });
-    }, []);
+    }, [size, currentPage]);
+
+    const handleFileChange = (event) => {
+      setSelectedFile(event.target.files[0]);
+    }
+/*
+ useEffect(() => {
+        DepartmentService.getDpartmentDetailsByPaging({ currentPage, size }).then((res) => {
+            setDepartments(res.data.responseData.content);
+            setTotalPages(res.data.responseData.totalPages);
+        });
+
+        RoleService.getRoles().then((res) => {
+            setRoles(res.data);
+        });
+    }, []);*/
 
     const searchDeptName = (e) => {
         DepartmentService.getDpartmentDetailsByDeptNamePaging(e).then((res) => {
@@ -65,7 +83,7 @@ export default function DepartmentComponent() {
 
         DepartmentService.saveDpartmentDetails(department).then(res => {
             console.log("res=", res.data)
-            DepartmentService.getDpartmentDetailsByPaging().then((res) => {
+            DepartmentService.getDpartmentDetailsByPaging({ currentPage, size }).then((res) => {
                 setDepartments(res.data.responseData.content);
                 setDeptName('');
                 setRemark('');
@@ -103,7 +121,7 @@ export default function DepartmentComponent() {
             let updateDepartment = { roleId, deptId, deptName, remark, statusCd };
 
             DepartmentService.updateDepartmentDetails(updateDepartment).then(res => {
-                DepartmentService.getDpartmentDetailsByPaging().then((res) => {
+                DepartmentService.getDpartmentDetailsByPaging({ currentPage, size }).then((res) => {
                     setDepartments(res.data.responseData.content);
                     console.log(res.data.responseData.content)
                 });
@@ -121,7 +139,7 @@ export default function DepartmentComponent() {
         let department = { roleId, deptId, deptName, remark, statusCd };
 
         DepartmentService.updateDepartmentDetails(department).then(res => {
-            DepartmentService.getDpartmentDetailsByPaging().then((res) => {
+            DepartmentService.getDpartmentDetailsByPaging({ currentPage, size }).then((res) => {
                 setDepartments(res.data.responseData.content);
                 console.log(res.data)
             });
@@ -184,8 +202,9 @@ export default function DepartmentComponent() {
                                 }
                             </tbody>
                         </table>
+                        
                     </div>
-
+                  <Pagination setCurrentPage={setCurrentPage} currentPage={currentPage} setSize={setSize} totalPages={totalPages} />
                 </div>
                 <div className="col-md-2"></div>
 

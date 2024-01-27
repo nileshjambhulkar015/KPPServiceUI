@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import RoleService from "../../services/RoleService";
 import DepartmentService from "../../services/DepartmentService";
 import axios from 'axios'
+import Pagination from "../Pagination/Pagination";
 export default function DesignationComponent() {
     const [roleId, setRoleId] = useState('');
     const [roleName, setRoleName] = useState('');
@@ -21,20 +22,24 @@ export default function DesignationComponent() {
     const [roles, setRoles] = useState([])
 
     const [selectedFile, setSelectedFile] = useState(null);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [size, setSize] = useState(8);
+    const [totalPages, setTotalPages] = useState(10);
 
     const handleFileChange = (event) => {
       setSelectedFile(event.target.files[0]);
     }
     useEffect(() => {
-        DesignationService.getDesignationDetailsByPaging().then((res) => {
+        DesignationService.getDesignationDetailsByPaging({ currentPage, size }).then((res) => {
             setDesignations(res.data.responseData.content);
+            setTotalPages(res.data.responseData.totalPages);
             console.log(res.data)
         });
 
         DepartmentService.getRolesInDept().then((res) => {
             setRoles(res.data);
         });      
-    }, []);
+    },  [size, currentPage]);
 
     const searchDesigName = (e) => {
         DesignationService.getDesignationDetailsByDesigNamePaging(e).then((res) => {
@@ -55,7 +60,7 @@ export default function DesignationComponent() {
         let designation = { roleId, deptId, desigName, remark, statusCd };
 
         DesignationService.saveDesignationDetails(designation).then(res => {
-            DesignationService.getDesignationDetailsByPaging().then((res) => {
+            DesignationService.getDesignationDetailsByPaging({ currentPage, size }).then((res) => {
                 setDesignations(res.data.responseData.content);
                 console.log(res.data)
             });
@@ -91,7 +96,7 @@ export default function DesignationComponent() {
         let updateDesignation = {desigId,roleId, deptId, desigName,remark, statusCd };
         
         DesignationService.updateDesignationDetails(updateDesignation).then(res => {
-            DesignationService.getDesignationDetailsByPaging().then((res) => {
+            DesignationService.getDesignationDetailsByPaging({ currentPage, size }).then((res) => {
                 setDesignations(res.data.responseData.content);
             });
            
@@ -136,7 +141,7 @@ export default function DesignationComponent() {
 
            
             DesignationService.updateDesignationDetails(deleteDesignation).then(res => {
-                DesignationService.getDesignationDetailsByPaging().then((res) => {
+                DesignationService.getDesignationDetailsByPaging({ currentPage, size }).then((res) => {
                     setDesignations(res.data.responseData.content);
                 });
                 console.log("designation deleted");
@@ -205,7 +210,7 @@ export default function DesignationComponent() {
                         </tbody>
                     </table>
                 </div>
-
+                <Pagination setCurrentPage={setCurrentPage} currentPage={currentPage} setSize={setSize} totalPages={totalPages} />
             </div>
             <div className="col-md-2"></div>
 

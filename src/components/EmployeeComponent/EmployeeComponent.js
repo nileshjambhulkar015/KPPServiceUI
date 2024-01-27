@@ -4,6 +4,7 @@ import RoleService from "../../services/RoleService";
 import DepartmentService from "../../services/DepartmentService";
 import DesignationService from "../../services/DesignationService";
 import Cookies from 'js-cookie';
+import Pagination from "../Pagination/Pagination";
 export default function EmployeeComponent() {
 
     const [empId, setEmpId] = useState('');
@@ -47,6 +48,9 @@ export default function EmployeeComponent() {
     const [reportingEmpName, setReportingEmpName] = useState([])
 
     const [empFirstNameSearch, setEmpFirstNameSearch] = useState('');
+    const [currentPage, setCurrentPage] = useState(0);
+    const [size, setSize] = useState(8);
+    const [totalPages, setTotalPages] = useState(10);
 
     //for gender selection
     const onGenderChangeHandler = (event) => {
@@ -70,7 +74,7 @@ export default function EmployeeComponent() {
         console.log(employee)
 
         EmployeeService.saveEmployeeDetails(employee).then(res => {
-            EmployeeService.getEmployeeDetailsByPaging().then((res) => {
+            EmployeeService.getEmployeeDetailsByPaging({ currentPage, size }).then((res) => {
                 setEmployees(res.data.responseData.content);
             });
             console.log("Employee added");
@@ -83,8 +87,9 @@ export default function EmployeeComponent() {
 
     useEffect(() => {
         console.log("logs ", Cookies.get('empEId'))
-        EmployeeService.getEmployeeDetailsByPaging().then((res) => {
+        EmployeeService.getEmployeeDetailsByPaging({ currentPage, size }).then((res) => {
             setEmployees(res.data.responseData.content);
+            setTotalPages(res.data.responseData.totalPages);
         });
 
         RoleService.getRolesInDesignation().then((res) => {
@@ -97,7 +102,7 @@ export default function EmployeeComponent() {
             setReportingRoles(res.data);
         });
 
-    }, []);
+    }, [size, currentPage]);
 
     const searchEmployeeFirstName = (e) => {
         EmployeeService.getEmployeeDetailsByEmpFirstNamePaging(e).then((res) => {
@@ -214,7 +219,7 @@ export default function EmployeeComponent() {
 
             let employeeData = { empId, empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
             EmployeeService.updateEmployeeDetails(employeeData).then(res => {
-                EmployeeService.getEmployeeDetailsByPaging().then((res) => {
+                EmployeeService.getEmployeeDetailsByPaging({ currentPage, size }).then((res) => {
                     setEmployees(res.data.responseData.content);
                 });
                 console.log("Employee deleted");
@@ -233,7 +238,7 @@ export default function EmployeeComponent() {
         let employeeData = { empId, empEId, roleId, deptId, desigId, reportingEmpId, regionId, siteId, empFirstName, empMiddleName, empLastName, empDob, empMobileNo, empEmerMobileNo, empPhoto, emailId, tempAddress, permAddress, empGender, empBloodgroup, remark, statusCd };
 
         EmployeeService.updateEmployeeDetails(employeeData).then(res => {
-            EmployeeService.getEmployeeDetailsByPaging().then((res) => {
+            EmployeeService.getEmployeeDetailsByPaging({ currentPage, size }).then((res) => {
                 setEmployees(res.data.responseData.content);
             });
             console.log("Employee deleted");
@@ -301,7 +306,7 @@ export default function EmployeeComponent() {
                         </tbody>
                     </table>
                 </div>
-
+                <Pagination setCurrentPage={setCurrentPage} currentPage={currentPage} setSize={setSize} totalPages={totalPages} />
             </div>
             <div className="col-md-1"></div>
 
