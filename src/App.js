@@ -4,7 +4,7 @@ import KeyParameterComponent from './components/KeyParameterComponent/KeyParamet
 
 import EmployeeComponent from './components/EmployeeComponent/EmployeeComponent';
 import DesignationComponent from './components/DesignationComponent/DesignationComponent';
-
+import AddNewEmployeeComponent from './components/AddNewEmployeeComponent/AddNewEmployeeComponent'
 import DepartmentComponent from './components/DepartmentComponent/DepartmentComponent';
 import RoleComponent from "./components/RoloComponent/RoleComponent";
 import Cookies from 'js-cookie';
@@ -58,6 +58,7 @@ function App() {
         <Route exact path="/employee" element={<EmployeeComponent />}></Route>
         <Route exact path="/keyparemeter" element={<KeyParameterComponent />} ></Route>
         <Route exact path="/employeekpp" element={<AllEmployeesKppComponent />}></Route>
+        <Route exact path="/newEmployee" element={<AddNewEmployeeComponent />}></Route>
       </Routes>
     </BrowserRouter>
   );
