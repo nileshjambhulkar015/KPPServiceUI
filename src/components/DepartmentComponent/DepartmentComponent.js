@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import DepartmentService from "../../services/DepartmentService";
 import RoleService from "../../services/RoleService";
+import axios from 'axios';
+
 
 export default function DepartmentComponent() {
     const [roleId, setRoleId] = useState('');
@@ -13,6 +15,11 @@ export default function DepartmentComponent() {
 
     const [departments, setDepartments] = useState([])
     const [roles, setRoles] = useState([])
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const handleFileChange = (event) => {
+      setSelectedFile(event.target.files[0]);
+    }
 
     useEffect(() => {
         DepartmentService.getDpartmentDetailsByPaging().then((res) => {
@@ -32,6 +39,25 @@ export default function DepartmentComponent() {
         });
     }
 
+    const handleUpload = async () => {
+        try {
+          const formData = new FormData();
+          formData.append('file', selectedFile);
+      
+          await axios.post('http://localhost:9091/department/upload-department', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+      
+          alert('File uploaded successfully!');
+        } catch (error) {
+          console.error('Error uploading file:', error.message);
+          alert('Failed to upload file.');
+        }
+      };
+      
+    
     const saveDepartment = (e) => {
         e.preventDefault()
         let statusCd = 'A';
@@ -123,7 +149,12 @@ export default function DepartmentComponent() {
                                 <button type="submit" className="btn btn-primary" onClick={() => searchDeptName(deptNameSearch)}>Search</button>
                             </div>
                         </div>
-                        <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveDepartment">Add Department</button></div>
+                        <div className="col-sm-4"><button type="button" className="btn btn-primary" data-toggle="modal" data-target="#saveDepartment">Add Department</button>
+                        <input type="file" onChange={handleFileChange} />
+                         <button onClick={handleUpload} disabled={!selectedFile}>
+                             Import Departments
+                        </button>
+                        </div>
                     </div>
                     <div className="row">
 
